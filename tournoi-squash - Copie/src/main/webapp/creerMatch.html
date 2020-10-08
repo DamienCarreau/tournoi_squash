@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Défier un joueur</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript"> 
+            $('document').ready(function () {
+                var idUser = null;
+                var idSport = null;
+                var idAdversaire = null;
+                var classement = null;
+                tmp = [];
+                location.search
+                        .substr(1)
+                        .split("&")
+                        .forEach(function (item) {
+                            tmp = item.split("=");
+                            if (tmp[0] === "idSport")
+                                idSport = decodeURIComponent(tmp[1]);
+                            else if (tmp[0] === "idA")
+                                idAdversaire = decodeURIComponent(tmp[1]);
+                            else if (tmp[0] === "c")
+                                classement = decodeURIComponent(tmp[1]);
+                        });
+                if (idSport === null) {
+                    alert("Le sport n'a pas été spécifié");
+                    return;
+                }
+                if (idAdversaire === null) {
+                    alert("L'adversaire n'a pas été spécifié");
+                    return;
+                }
+                
+                var dtToday = new Date();
+
+                var month = dtToday.getMonth() + 1;
+                var day = dtToday.getDate();
+                var year = dtToday.getFullYear();
+
+                if(month < 10)
+                    month = '0' + month.toString();
+                if(day < 10)
+                    day = '0' + day.toString();
+
+                var maxDate = year + '-' + month + '-' + day;    
+                $('#date').attr('min', maxDate);
+                
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                            idUser = response.id;
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getSportLevel',
+                        id: idSport
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#sport').text(response.sportName);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserInfo',
+                        idUser: idAdversaire
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#text').text("Vous souhaitez défier "+response.prenom+" "+response.nom+" classé "+classement);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classement.html?idSport="+idSport;
+                });
+                
+                $('#historique').on('click', function () {
+                    document.location.href = "./historique.html?idSport="+idSport;
+                });
+                
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'creerMatch',
+                            idSport: idSport,
+                            idJ1: idUser,
+                            idJ2: idAdversaire,
+                            date: $('#date').val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                document.location.href = "./finaliseMatch.html?idSport="+idSport+"&idMatch="+response.id;
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+                
+                $('#accueil').on('click', function () {
+                    document.location.href = "./accueilJoueur.html";
+                });
+                
+                $('#sport').on('click', function () {
+                    document.location.href = "./sport.html?idSport="+idSport;
+                });
+                
+                $('#defier').on('click', function () {
+                    document.location.href = "./defier.html?idSport="+idSport;
+                });
+                
+                $('#annuler').on('click', function () {
+                    document.location.href = "javascript:history.go(-1)";
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("accueil");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/accueil2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/accueil.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" id="sport"></a>
+            <a class="navigation-button" id="classement">Classement</a>
+            <a class="navigation-button" id="defier">Défier un joueur</a>
+            <a class="navigation-button" id="historique">Historique</a>
+        </div>
+
+        <section id="section">
+            <div class="white-container">
+                <p id="text"></p>
+                <p>Choississez une date :</p>
+                <input type="date" name="date" id="date"/>
+                <div class="colonne">
+                <button id="annuler">Annuler</button>
+                </div>
+                <div class="colonne">
+                    <button id="button">Défier</button>
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>

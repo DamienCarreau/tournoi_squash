@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mettre en pause son compte</title>
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var id = 0;
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            id = response.id;
+                            if(response.pause === 0){
+                                $('#button').text("Mettre mon compte en pause");
+                                $('#titre').text("Mettre en pause son compte");
+                            }else{
+                                $('#button').text("Réactiver mon compte");
+                                $('#titre').text("Réactiver son compte");
+                            }
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Aucune session ouverte");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'pauseJoueur',
+                            id: id,
+                            date: $("#date").val(),
+                            numeroDeTelephone: $("#numeroDeTelephone").val(),
+                            email: $("#email").val(),
+                            password: $("#motDePasse").val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                if(response.etat === "0"){
+                                    alert("Informations incorrectes !");
+                                }else{
+                                    alert("Votre compte a été mis à jour");
+                                    document.location.href = "./accueilJoueur.html";
+                                }
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+                
+                $('#annuler').on('click', function () {
+                    //document.location.href = "./connexion.html";
+                    document.location.href = "javascript:history.go(-1)";
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="white-container" style="width: 50%">
+            <h1 style="text-align: center;" id="titre">Mettre en pause</h1>
+            <p>Confirmez les informations suivantes :</p>
+            <div class="colonne">
+                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
+                <input type="text" placeholder="Email" name="email" id="email"/>
+            </div>
+            <div class="colonne">
+                <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+                <input type="password" placeholder="Mot de passe" name="motDePasse" id="motDePasse" />
+            </div>
+            <div class="colonne">
+                <button id="annuler">Annuler</button>
+            </div>
+            <div class="colonne">
+                <button id="button">Mettre en pause mon compte</button>
+            </div>
+        </div>
+
+    </body>
+</html>

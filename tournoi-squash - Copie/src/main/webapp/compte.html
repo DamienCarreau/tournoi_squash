@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mon Compte</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function disconnect() {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'disconnect'
+                    },
+                    dataType: 'json'
+                })
+                        .always(function () { // Fonction toujours appelée
+                            document.location.href = "./connexion.html";
+                        });
+            }
+
+            $(document).ready(function () {
+                var idUser = null;
+
+                $('#disconnect-button').click(disconnect);
+                
+                $('#mdp').on('click', function () {
+                    document.location.href = "./mdp.html";
+                });
+                
+                $('#sup').on('click', function () {
+                    document.location.href = "./supprimerCompte.html";
+                });
+                
+                $('#pause').on('click', function () {
+                    document.location.href = "./pauseCompte.html";
+                });
+                
+                $('#mod').on('click', function () {
+                    document.location.href = "./modif.html";
+                });
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('.nom').text(response.nom);
+                            $('.prenom').text(response.prenom);
+                            $('#date').text(response.date);
+                            $('#telephone').text(response.telephone);
+                            $('#email').text(response.email);
+                            $('#sexe').text(response.sexe);
+                            idUser = response.id;
+                            $.ajax({
+                                url: './Servlet',
+                                method: 'GET',
+                                data: {
+                                    todo: 'getUserLevel',
+                                    id: idUser
+                                },
+                                dataType: 'json'
+                            })
+                                    .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                        var c1 = $('#c1');
+                                        var c2 = $('#c2');
+                                        $.each(response.levels,
+                                            function (index, element) {
+                                                c1.append($('<p>',{
+                                                    text: element.sport+" - Niveau :"
+                                                }));
+                                                c2.append($('<p>',{
+                                                    text: element.niveau+" - Classement : "+element.classement
+                                                }));
+                                            });
+                                    })
+                                    .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                        alert("Erreur lors de l'appel AJAX");
+                                    })
+                                    .always(function () { // Fonction toujours appelée
+
+                                    });
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong class="nom"></strong>
+                <br/>
+                Prenom : <strong class="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("disconnect-button");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/deco2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/deco.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
+            <a class="navigation-button-select">Mon Compte</a>
+        </div>
+
+        <section id="section">
+            <div class="white-container">
+                <div style="display: inline-block; width: 33%;" id="c1">
+                    <p>Nom : </p>
+                    <p>Prenom : </p>
+                    <p>Date de Naissance : </p>
+                    <p>Adresse mail : </p>
+                    <p>Telephone : </p>
+                    <p>Genre : </p>
+                </div>
+                <div style="display: inline-block; width: 33%;" id="c2">
+                    <p class="nom"></p>
+                    <p class="prenom"></p>
+                    <p id="date"></p>
+                    <p id="email"></p>
+                    <p id="telephone"></p>
+                    <p id="sexe"></p>
+                </div>
+                <div style="display: inline-block; width: 33%;">
+                    <button id="mod" style="margin-top: 20px;margin-bottom: 20px;">Modifier mes informations</button>
+                    <button id="mdp" style="margin-top: 20px;margin-bottom: 20px;">Modifier mon mot de passe</button>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button id="pause" style="width: 70%">Mettre en pause / réactiver mon compte</button>
+                </div>
+                <div  style="margin-top: 20px; text-align: center;">
+                    <button id="sup" style="width: 70%">Supprimer mon compte</button>
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>

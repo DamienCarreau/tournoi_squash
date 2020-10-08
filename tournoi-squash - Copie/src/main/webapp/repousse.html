@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Proposer une autre date</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function repousse(idSport,idMatch) {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'nouvelleDate',
+                        idMatch: idMatch,
+                        date: $('#date').val()
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            alert("Votre match a été repoussé.");
+                            document.location.href = "./sport.html?idSport="+idSport;
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+            }
+         
+            $('document').ready(function () {
+                var idUser;
+                var idSport = null;
+                var idMatch = null;
+                tmp = [];
+                location.search
+                        .substr(1)
+                        .split("&")
+                        .forEach(function (item) {
+                            tmp = item.split("=");
+                            if (tmp[0] === "idSport")
+                                idSport = decodeURIComponent(tmp[1]);
+                            else if (tmp[0] === "idMatch")
+                                idMatch = decodeURIComponent(tmp[1]);
+                        });
+                if (idSport === null) {
+                    alert("Le sport n'a pas été spécifié");
+                    return;
+                }
+                if (idMatch === null) {
+                    alert("Le match n'a pas été spécifié");
+                    return;
+                }
+                
+                
+                var dtToday = new Date();
+
+                var month = dtToday.getMonth() + 1;
+                var day = dtToday.getDate();
+                var year = dtToday.getFullYear();
+
+                if(month < 10)
+                    month = '0' + month.toString();
+                if(day < 10)
+                    day = '0' + day.toString();
+
+                var maxDate = year + '-' + month + '-' + day;    
+                $('#date').attr('min', maxDate);
+                
+                
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                            idUser = response.id;
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getSportLevel',
+                        id: idSport
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#sport').text(response.sportName);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'infoMatch',
+                        idMatch: idMatch
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            if(idUser === response.idJoueur1)
+                                $('#text').text(response.prenomJoueur2+" "+response.nomJoueur2+" classé "+response.classementJ2+" vous a défié le "+response.date);
+                            else
+                                $('#text').text(response.prenomJoueur1+" "+response.nomJoueur1+" classé "+response.classementJ1+" vous a défié le "+response.date);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classement.html?idSport="+idSport;
+                });
+                
+                $('#historique').on('click', function () {
+                    document.location.href = "./historique.html?idSport="+idSport;
+                });
+                
+                $('#defier').on('click', function () {
+                    document.location.href = "./defier.html?idSport="+idSport;
+                });
+                
+                $('#accueil').on('click', function () {
+                    document.location.href = "./accueilJoueur.html";
+                });
+                
+                $('#valider').on('click', function () {
+                    repousse(idSport,idMatch);
+                });
+                
+                $('#sport').on('click', function () {
+                    document.location.href = "./sport.html?idSport="+result;
+                });
+                
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("accueil");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/accueil2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/accueil.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" id="sport"></a>
+            <a class="navigation-button" id="classement">Classement</a>
+            <a class="navigation-button" id="defier">Défier un joueur</a>
+            <a class="navigation-button" id="historique">Historique</a>
+        </div>
+
+        <section id="accueil">
+            <div class="white-container">
+                <p id="text"></p>
+                <p>Proposer une nouvelle date :</p>
+                <input type="date" name="date" placeholder="Nouvelle date" id="date"/>
+                <button style="width: 50%; margin-left: 25%;" id="valider">Valider</button>
+            </div>
+        </section>
+
+
+    </body>
+</html>

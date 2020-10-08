@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Changer votre mot de passe</title>
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'changerMdp',
+                            date: $("#date").val(),
+                            numeroDeTelephone: $("#numeroDeTelephone").val(),
+                            email: $("#email").val(),
+                            password: $("#motDePasse").val(),
+                            cpassword: $("#cmotDePasse").val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                if(response.etat === "0"){
+                                    alert("Informations incorrectes !");
+                                }else{
+                                    alert("Votre mot de passe a été modifié");
+                                    document.location.href = "./connexion.html";
+                                }
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+                
+                $('#annuler').on('click', function () {
+                    document.location.href = "javascript:history.go(-1)";
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="white-container" style="width: 50%">
+            <h1 style="text-align: center;">Changer votre mot de passe</h1>
+            <p>Confirmez les informations suivantes :</p>
+            <div class="colonne">
+                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
+            </div>
+            <div class="colonne">
+                <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+            </div>
+            <input type="text" placeholder="Email" name="email" id="email"/>
+            <input type="password" placeholder="Nouveau mot de passe" name="motDePasse" id="motDePasse" />
+            <input type="password" placeholder="Confirmez le mot de passe" name="cmotDePasse" id="cmotDePasse" />
+            <div class="colonne">
+                <button id="annuler">Annuler</button>
+            </div>
+            <div class="colonne">
+                <button id="button">Modifier mon mot de passe</button>
+            </div>
+        </div>
+
+    </body>
+</html>

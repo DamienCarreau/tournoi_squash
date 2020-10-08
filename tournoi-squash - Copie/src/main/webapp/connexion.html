@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Connexion</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+
+        <script type="text/javascript">
+            function connect() {
+                var mail = $("#mail").val();
+                var password = $("#password").val();
+                if (mail.trim() === "") {
+                    alert("Veuillez entrer votre email.");
+                    return;
+                }
+                if (password === "") {
+                    alert("Veuiller entrer votre mot de passe.");
+                    return;
+                }
+                $.ajax({
+                    url: './Servlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'authentificate',
+                        mail: $("#mail").val(),
+                        password: $("#password").val()
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            if (response.type === "joueur") {
+                                document.location.href = "./accueilJoueur.html";
+                            } else if (response.type === "admin") {
+                                document.location.href = "./accueilAdmin.html";
+                            } else {
+                                alert("Email et/ou mot de passe érroné(s)");
+                            }
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Email et/ou mot de passe érroné(s)");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+            }
+
+            $('document').ready(function () {
+                $('#connect-button').click(connect);
+
+                if($(window).width() < 1000){
+                    $('#banniere').width('80%');
+                    alert("Nous vous conseillons d'utiliser la version ordinateur. (Options -> Version pour ordinateur)");
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <div class="white-container" id="banniere" style="width: 30%; height: 80%;">
+            <h1 class="text-centerer">Connexion</h1>
+            <input type="text" id="mail" placeholder="Email"/>
+            <input type="password" id="password" placeholder="Mot de passe"/>
+            <p>
+            <button id="connect-button">Se connecter</button>
+            <div class="text-centerer" style="margin-bottom: 20px;">
+                <a href="./inscription.html" class="padding-medium">S'inscrire</a>  
+            </div>
+            <div class="text-centerer">
+                <a href="./mdp.html" class="padding-medium">Mot de passe oublié</a>
+            </div>
+        </div>
+    </body>
+</html>

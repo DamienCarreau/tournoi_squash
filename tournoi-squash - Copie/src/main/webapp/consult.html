@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Consulter les matchs</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function disconnect() {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'disconnect'
+                    },
+                    dataType: 'json'
+                })
+                        .always(function () { // Fonction toujours appelée
+                            document.location.href = "./connexion.html";
+                        });
+            }
+
+            $(document).ready(function () {
+
+                $('#disconnect-button').click(disconnect);
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'afficheSports'
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                var liste = $('#liste');
+                                $.each(response.sports,
+                                    function (index, element) {
+                                        liste.append('<option value='+element.id+'>'+element.nom+'</option>');
+                                    });
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                        
+                $('#consult').on('click', function () {
+                    document.location.href = "./consult.html";
+                });
+                
+                $('#users').on('click', function () {
+                    document.location.href = "./users.html";
+                });
+                
+                $('#ajout').on('click', function () {
+                    document.location.href = "./ajoutSport.html";
+                });
+                
+                $('#compte').on('click', function () {
+                    document.location.href = "./accueilAdmin.html";
+                });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classementAdmin.html";
+                });
+     
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'afficheMatch',
+                            idSport: $('#liste').val()
+                        },
+                        dataType: 'json'
+                    })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('.list-container').each(function(){
+                                $(this).remove();
+                            }); 
+                            $('#sport').text(document.getElementById('liste').options[document.getElementById('liste').selectedIndex].text);
+                            var div = $('#section');
+                            $.each(response.matchs,
+                                    function (index, element) {
+                                        var box = $('<div>', {
+                                            class : "list-container",
+                                            style: "text-align: center; width: 60%;"
+                                        });
+                                        box.append($('<p>',{
+                                            text: element.date,
+                                            style: "font-weight: bold; margin-top:5px; margin-bottom:5px;"
+                                        }));
+                                        var d = $('<div>', {
+                                            style: "margin-top:5px; margin-bottom:5px;"
+                                        });
+                                        d.append($('<p>',{
+                                            text: element.prenomJoueur1+" "+element.nomJoueur1,
+                                            style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                        }));
+                                        d.append($('<p>',{
+                                            text: element.scoreJ1+" - "+element.scoreJ2,
+                                            style: "display: inline-block; margin: 5px 25px 5px 25px"
+                                        }));
+                                        d.append($('<p>',{
+                                            text: element.prenomJoueur2+" "+element.nomJoueur2,
+                                            style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                        }));
+                                        box.append(d);
+                                        div.append(box);
+                                    });
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("disconnect-button");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/deco2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/deco.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button-select" id="consult">Consulter les matchs</a>
+            <a class="navigation-button" id="classement">Classements</a>
+            <a class="navigation-button" id="users">Utilisateurs</a>
+            <a class="navigation-button" id="ajout">Ajouter un Sport</a>
+            <a class="navigation-button" id="compte">Mon Compte</a>
+        </div>
+
+        <section id="section">
+            <div class="white-container" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 30px;">
+                <div style="display: inline-block; width: 33%;">
+                    <p>Choississez un sport :</p>
+                </div>
+                <div style="display: inline-block; width: 33%;">
+                    <select id='liste' style="width: 80%;"></select>
+                </div>
+                <div style="display: inline-block; width: 33%;">
+                    <button id="button">Rechercher</button>
+                </div>
+            </div>
+            <p id="sport" style="text-align: center; color: white; margin-bottom: 5px;"></p>
+            <hr style="width: 60%;">
+        </section>
+
+
+    </body>
+</html>

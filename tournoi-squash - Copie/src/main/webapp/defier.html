@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Défier un joueur</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript"> 
+            $('document').ready(function () {
+                var idUser = null;
+                var result = null,
+                tmp = [];
+                location.search
+                        .substr(1)
+                        .split("&")
+                        .forEach(function (item) {
+                            tmp = item.split("=");
+                            if (tmp[0] === "idSport")
+                                result = decodeURIComponent(tmp[1]);
+                        });
+                if (result === null) {
+                    alert("Le sport n'a pas été spécifié");
+                    return;
+                }
+                
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                            idUser = response.id;
+                            $.ajax({
+                                url: './Servlet',
+                                method: 'GET',
+                                data: {
+                                    todo: 'getDefiePossible',
+                                    idSport: result,
+                                    idUser: idUser
+                                },
+                                dataType: 'json'
+                            })
+                                    .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                        var div = $('#section');
+                                        $.each(response.levels,
+                                            function (index, element) {
+                                                var box = $('<div>');
+                                                if(idUser === element.idUser){
+                                                    box.append($('<div>', {
+                                                        class : "list-container",
+                                                        text : element.classement,
+                                                        style: "display: inline-block; width: 8%; margin-right: 2%; border: solid; border-color: #C0C0C0; border-width: 5px;"
+                                                    }));
+                                                    var d = $('<div>',{
+                                                        class : "list-container",
+                                                        style: "display: inline-block; width: 50%; border: solid; border-color: #C0C0C0; border-width: 5px;"
+                                                    });
+                                                    d.append($('<div>',{
+                                                        text : element.prenom+" "+element.nom,
+                                                        style: "display: inline-block;  width: 50%;"
+                                                    }));
+                                                    var fe = $('<div>',{
+                                                        style: "display: inline-block;  width: 50%;"
+                                                    });
+                                                    d.append(fe);
+                                                    box.append(d);
+                                                }else{
+                                                    box.append($('<div>', {
+                                                        class : "list-container",
+                                                        text : element.classement,
+                                                        style: "display: inline-block; width: 8%; margin-right: 2%;"
+                                                    }));
+                                                    var d = $('<div>',{
+                                                        class : "list-container",
+                                                        style: "display: inline-block; width: 50%;"
+                                                    });
+                                                    d.append($('<div>',{
+                                                        text : element.prenom+" "+element.nom,
+                                                        style: "display: inline-block;  width: 50%;"
+                                                    }));
+                                                    var fe = $('<div>',{
+                                                        style: "display: inline-block;  width: 50%;"
+                                                    });
+                                                    fe.append($('<button>', {
+                                                        "text": "Defier",
+                                                        style: "width: 50%; height: 30px; text-align: center;"
+                                                    })
+                                                        .on("click", function () {
+                                                            document.location.href = "creerMatch.html?idSport="+result+"&idA="+element.idUser+"&c="+element.classement;
+                                                        })
+                                                    );
+                                                    d.append(fe);
+                                                    box.append(d);
+                                                }
+
+                                                div.append(box);
+                                            });
+                                    })
+                                    .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                        alert("Erreur lors de l'appel AJAX");
+                                    })
+                                    .always(function () { // Fonction toujours appelée
+
+                                    });
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getSportLevel',
+                        id: result
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#sport').text(response.sportName);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classement.html?idSport="+result;
+                });
+                
+                $('#historique').on('click', function () {
+                    document.location.href = "./historique.html?idSport="+result;
+                });
+                
+                $('#defier').on('click', function () {
+                    document.location.href = "./defier.html?idSport="+result;
+                });
+                
+                $('#accueil').on('click', function () {
+                    document.location.href = "./accueilJoueur.html";
+                });
+                
+                $('#sport').on('click', function () {
+                    document.location.href = "./sport.html?idSport="+result;
+                });
+                
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("accueil");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/accueil2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/accueil.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" id="sport"></a>
+            <a class="navigation-button" id="classement">Classement</a>
+            <a class="navigation-button-select" id="defier">Défier un joueur</a>
+            <a class="navigation-button" id="historique">Historique</a>
+        </div>
+
+        <section id="section" style="text-align: center; margin-top: 20px;">
+        </section>
+
+
+    </body>
+</html>

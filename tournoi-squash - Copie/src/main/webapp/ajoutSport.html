@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ajouter un Sport</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function disconnect() {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'disconnect'
+                    },
+                    dataType: 'json'
+                })
+                        .always(function () { // Fonction toujours appelée
+                            document.location.href = "./connexion.html";
+                        });
+            }
+
+            $(document).ready(function () {
+
+                $('#disconnect-button').click(disconnect);
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $('#consult').on('click', function () {
+                    document.location.href = "./consult.html";
+                });
+                
+                $('#users').on('click', function () {
+                    document.location.href = "./users.html";
+                });
+                
+                $('#ajout').on('click', function () {
+                    document.location.href = "./ajoutSport.html";
+                });
+                
+                $('#compte').on('click', function () {
+                    document.location.href = "./accueilAdmin.html";
+                });
+                
+                $('#annuler').on('click', function () {
+                    document.location.href = "javascript:history.go(-1)";
+                });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classementAdmin.html";
+                });
+                
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'ajoutSport',
+                            nomSport: $('#nomSport').val(),
+                            niveaux: $('#niveaux').val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                alert("Le sport a été ajouter");
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("disconnect-button");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/deco2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/deco.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" id="consult">Consulter les matchs</a>
+            <a class="navigation-button" id="classement">Classements</a>
+            <a class="navigation-button" id="users">Utilisateurs</a>
+            <a class="navigation-button-select" id="ajout">Ajouter un Sport</a>
+            <a class="navigation-button" id="compte">Mon Compte</a>
+        </div>
+
+        <section id="section">
+            <div class="white-container">
+                <p>Vous souhaitez ajouter un sport :</p>
+                <div>
+                    <p style="display: inline-block;">Nom du sport : </p>
+                    <input type="text" id="nomSport" style="display: inline-block; width: 25%;"/>
+                </div>
+                <div>
+                    <p style="display: inline-block;">Niveaux possibles : </p>
+                    <input type="text" id="niveaux" placeholder="Ordre décroissant - Séparés par des virgules" style="display: inline-block; width: 50%;"/>
+                </div>
+                <div class="colonne">
+                    <button id="annuler">Annuler</button>
+                </div>
+                <div class="colonne">
+                    <button id="button">Ajouter ce sport</button>
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>

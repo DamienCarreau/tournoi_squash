@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Liste des Utilisateurs</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function disconnect() {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'disconnect'
+                    },
+                    dataType: 'json'
+                })
+                        .always(function () { // Fonction toujours appelée
+                            document.location.href = "./connexion.html";
+                        });
+            }
+
+            $(document).ready(function () {
+                                
+                $('#disconnect-button').click(disconnect);
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+                $('#consult').on('click', function () {
+                    document.location.href = "./consult.html";
+                });
+                
+                $('#users').on('click', function () {
+                    document.location.href = "./users.html";
+                });
+                
+                $('#ajout').on('click', function () {
+                    document.location.href = "./ajoutSport.html";
+                });
+                
+                $('#compte').on('click', function () {
+                    document.location.href = "./accueilAdmin.html";
+                });
+                
+                $('#classement').on('click', function () {
+                    document.location.href = "./classementAdmin.html";
+                });
+                
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'afficheJoueurs'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            var div = $('#section');
+                            var cpt = 0;
+                            $.each(response.joueurs,
+                                function (index, element) {
+                                    var box = $('<div>', {
+                                        class : "list-container",
+                                        style: "text-align: center; width: 60%;"
+                                    });
+                                    box.append($('<p>',{
+                                        text: element[0].prenom+" "+element[0].nom+" - "+element[0].email+" - "+element[0].telephone+" - "+element[0].sexe,
+                                        style: "font-weight: bold; margin-top:5px; margin-bottom:20px;"
+                                    }));
+                                    
+                                    if(element[0].pause === 1){
+                                        box.append($('<p>',{
+                                            text: "Ce joueur est en pause",
+                                            style: "margin: 5px 20px 5px 0;"
+                                        }));
+                                        var f = $('<div>',{
+                                            style: "width: 50%; display: inline-block; margin-top: 15px;",
+                                            id: "class"+element[0].id
+                                        });
+                                        f.append($('<button>', {
+                                            "class": "small-flex",
+                                            "text": "Réactiver ce joueur",
+                                            "id": "bouton"+element[0].id,
+                                            "style": "width:80%;  height: 30px; margin-right: 2%;"
+                                        })
+                                            .on("click", function () {
+                                                document.getElementById("bouton"+element[0].id).remove();
+                                                var c = $('#class'+element[0].id);
+                                                c.append($('<button>',{
+                                                    text: "Annuler",
+                                                    style: "display: inline-block; width: 45%; height: 30px;"
+                                                })
+                                                    .on("click", function () {
+                                                        document.location.href = "./users.html";
+                                                    }));
+                                                c.append($('<button>',{
+                                                    text: "Réactiver ce joueur",
+                                                    style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                                })
+                                                    .on("click", function () {
+                                                        $.ajax({
+                                                            url: './Servlet',
+                                                            method: 'GET',
+                                                            data: {
+                                                                todo: 'pauseCompte',
+                                                                id: element[0].id
+                                                            },
+                                                            dataType: 'json'
+                                                        })
+                                                                .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                                                    alert("Le joueur n'est plus en pause");
+                                                                    document.location.href = "./users.html";
+                                                                })
+                                                                .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                                                    alert("Erreur lors de l'appel AJAX");
+                                                                })
+                                                                .always(function () { // Fonction toujours appelée
+
+                                                                });
+                                                    }));
+                                            }));
+                                        box.append(f);
+                                    }else{
+                                        for(let cpt = 1; cpt <= element[0].cpt; cpt++){
+                                            var d = $('<div>');
+                                            var fe = $('<div>', {
+                                                style: "margin-top:5px; margin-bottom:5px; width: 50%; display: inline-block;"
+                                            });
+                                            fe.append($('<p>',{
+                                                text: element[cpt].sport+" - Niveau : "+element[cpt].niveau,
+                                                style: "margin: 5px 0 5px 0;"
+                                            }));
+                                            var pe = $('<div>', {
+                                                id: element[0].id+"class"+element[cpt].idLevel,
+                                                style: "margin-top:5px; margin-bottom:5px; width: 50%; display: inline-block;"
+                                            });
+                                            pe.append($('<button>', {
+                                                "class": "small-flex",
+                                                "text": "Modifier son niveau",
+                                                id: element[0].id+"bouton"+element[cpt].idLevel,
+                                                "style": "width:80%; height: 30px;"
+                                            })
+                                                .on("click", function () {
+                                                    document.getElementById(element[0].id+"bouton"+element[cpt].idLevel).remove();
+                                                    var c = $('#'+element[0].id+'class'+element[cpt].idLevel);
+                                                    c.append($('<button>',{
+                                                        text: "Annuler",
+                                                        style: "display: inline-block; width: 30%; height: 30px;"
+                                                    })
+                                                        .on("click", function () {
+                                                            document.location.href = "./users.html";
+                                                        }));
+                                                    var select = $('<select>',{
+                                                        id:"select"+element[0].id,
+                                                        style: "width: 16%; margin-left: 2%;"
+                                                    });
+                                                    $.ajax({
+                                                        url: './Servlet',
+                                                        method: 'GET',
+                                                        data: {
+                                                            todo: 'getSportLevel',
+                                                            id: element[cpt].idSport
+                                                        },
+                                                        dataType: 'json'
+                                                    })
+                                                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                                                $.each(response.levels,
+                                                                    function (index, element) {
+                                                                        select.append('<option>'+element.level+'</option>');
+                                                                    });
+                                                            })
+                                                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                                                alert("Erreur lors de l'appel AJAX");
+                                                            })
+                                                            .always(function () { // Fonction toujours appelée
+
+                                                            });
+                                                    c.append(select);
+                                                    c.append($('<button>',{
+                                                        text: "Changer",
+                                                        style: "display: inline-block; width: 30%; height: 30px; margin-left: 2%;"
+                                                    })
+                                                        .on("click", function () {
+                                                            $.ajax({
+                                                                url: './Servlet',
+                                                                method: 'GET',
+                                                                data: {
+                                                                    todo: 'modifieNiveau',
+                                                                    idLevel: element[cpt].idLevel,
+                                                                    niveau: $('#select'+element[0].id).val()
+                                                                },
+                                                                dataType: 'json'
+                                                            })
+                                                                    .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                                                        alert("Le niveau a été changé");
+                                                                        document.location.href = "./users.html";
+                                                                    })
+                                                                    .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                                                        alert("Erreur lors de l'appel AJAX");
+                                                                    })
+                                                                    .always(function () { // Fonction toujours appelée
+
+                                                                    });
+                                                        }));
+                                                }));
+                                            d.append(fe);
+                                            d.append(pe);
+                                            box.append(d);
+                                        }
+                                        
+                                        var f = $('<div>',{
+                                            id: "class"+element[0].id,
+                                            style: "width: 50%; display: inline-block; margin-top: 15px;"
+                                        });
+                                        f.append($('<button>', {
+                                            "class": "small-flex",
+                                            "text": "Mettre en pause ce joueur",
+                                            id: "bouton"+element[0].id,
+                                            "style": "width:80%;  height: 30px; margin-right: 2%;"
+                                        })
+                                            .on("click", function () {
+                                                document.getElementById("bouton"+element[0].id).remove();
+                                                var c = $('#class'+element[0].id);
+                                                c.append($('<button>',{
+                                                    text: "Annuler",
+                                                    style: "display: inline-block; width: 45%; height: 30px;"
+                                                })
+                                                    .on("click", function () {
+                                                        document.location.href = "./users.html";
+                                                    }));
+                                                c.append($('<button>',{
+                                                    text: "Mettre en pause",
+                                                    style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                                })
+                                                    .on("click", function () {
+                                                        $.ajax({
+                                                            url: './Servlet',
+                                                            method: 'GET',
+                                                            data: {
+                                                                todo: 'pauseCompte',
+                                                                id: element[0].id
+                                                            },
+                                                            dataType: 'json'
+                                                        })
+                                                                .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                                                    alert("Le joueur est maintenant en pause");
+                                                                    document.location.href = "./users.html";
+                                                                })
+                                                                .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                                                    alert("Erreur lors de l'appel AJAX");
+                                                                })
+                                                                .always(function () { // Fonction toujours appelée
+
+                                                                });
+                                                    }));
+                                            }));
+                                        box.append(f);
+                                        
+                                    }
+                                        
+                                    var f = $('<div>',{
+                                        style: "width: 50%; display: inline-block; margin-top: 15px;",
+                                        id: "2class"+element[0].id
+                                    });
+                                    f.append($('<button>', {
+                                        "class": "small-flex",
+                                        "text": "Supprimer ce joueur",
+                                        id: "2bouton"+element[0].id,
+                                        "style": "width:80%;  height: 30px; margin-left 2%;"
+                                    })
+                                        .on("click", function () {
+                                            document.getElementById("2bouton"+element[0].id).remove();
+                                            var c = $('#2class'+element[0].id);
+                                            c.append($('<button>',{
+                                                text: "Annuler",
+                                                style: "display: inline-block; width: 45%; height: 30px;"
+                                            })
+                                                .on("click", function () {
+                                                    document.location.href = "./users.html";
+                                                }));
+                                            c.append($('<button>',{
+                                                text: "Supprimer ce joueur",
+                                                style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                            })
+                                                .on("click", function () {
+                                                    $.ajax({
+                                                        url: './Servlet',
+                                                        method: 'GET',
+                                                        data: {
+                                                            todo: 'supprimerCompte',
+                                                            id: element[0].id
+                                                        },
+                                                        dataType: 'json'
+                                                    })
+                                                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                                                alert("Le joueur a été supprimé");
+                                                                document.location.href = "./users.html";
+                                                            })
+                                                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                                                alert("Erreur lors de l'appel AJAX");
+                                                            })
+                                                            .always(function () { // Fonction toujours appelée
+
+                                                            });
+                                                }));
+                                        }));
+                                    box.append(f);
+                                    
+                                    div.append(box);
+                                    cpt++;
+                                });
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+                        
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("disconnect-button");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/deco2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/deco.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" id="consult">Consulter les matchs</a>
+            <a class="navigation-button" id="classement">Classements</a>
+            <a class="navigation-button-select" id="users">Utilisateurs</a>
+            <a class="navigation-button" id="ajout">Ajouter un Sport</a>
+            <a class="navigation-button" id="compte">Mon Compte</a>
+        </div>
+
+        <section id="section">
+        </section>
+
+
+    </body>
+</html>

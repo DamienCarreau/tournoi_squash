@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>S'inscrire à un Sport</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            function disconnect() {
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'disconnect'
+                    },
+                    dataType: 'json'
+                })
+                        .always(function () { // Fonction toujours appelée
+                            document.location.href = "./connexion.html";
+                        });
+            }
+            
+            $(document).ready(function () {
+                var idUser;
+                var result = null,
+                tmp = [];
+                location.search
+                        .substr(1)
+                        .split("&")
+                        .forEach(function (item) {
+                            tmp = item.split("=");
+                            if (tmp[0] === "idSport")
+                                result = decodeURIComponent(tmp[1]);
+                        });
+                if (result === null) {
+                    alert("Le sport n'a pas été spécifié");
+                    return;
+                }
+
+                $('#disconnect-button').click(disconnect);
+                
+                $('#annuler').on('click', function () {
+                    document.location.href = "javascript:history.go(-1)";
+                });
+                
+                
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'GET',
+                        data: {
+                            todo: 'inscriptionSport',
+                            idSport: result,
+                            idUser: idUser,
+                            niveau: $('#liste').val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                if(response.etat === "0"){
+                                    alert("Une erreur s'est produite");
+                                }else{
+                                    document.location.href = "./sport.html?idSport="+result;
+                                }
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getUserData'
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#nom').text(response.nom);
+                            $('#prenom').text(response.prenom);
+                            idUser = response.id;
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+
+                $.ajax({
+                    url: './Servlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'getSportLevel',
+                        id: result
+                    },
+                    dataType: 'json'
+                })
+                        .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            $('#text1').text("Vous n'êtes pas inscrit en "+response.sportName);
+                            var liste = $('#liste');
+                            $.each(response.levels,
+                                    function (index, element) {
+                                        liste.append('<option>'+element.level+'</option>');
+                                    });
+                        })
+                        .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always(function () { // Fonction toujours appelée
+
+                        });
+
+            });
+        </script>
+    </head>
+    <body>
+        <section class="top-bar">
+            <p id="client-data">
+                Nom : <strong id="nom"></strong>
+                <br/>
+                Prenom : <strong id="prenom"></strong>
+            </p>
+            <h1>Tournoi - Squash</h1>
+            <div style="width: 25%;">
+                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
+                <script type="text/javascript">
+                    var im = document.getElementById("disconnect-button");
+                    im.addEventListener("mouseover" ,function(){
+                        im.src = "./img/deco2.png";      
+                    }); 
+                    im.addEventListener("mouseleave" ,function(){
+                        im.src = "./img/deco.png";
+                    });
+               </script>
+            </div>
+        </section>
+
+        <div id="navigation-bar">
+            <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
+            <a class="navigation-button" href="./compte.html">Mon Compte</a>
+        </div>
+
+        <section id="accueil">
+            <div class="white-container">
+                <div>
+                    <p id='text1'></p>
+                    <p style="display: inline-block;">Pour vous inscrire, entrez votre niveau :</p> 
+                    <select id='liste' style="display: inline-block;"></select>
+                </div>
+                <div class="colonne">
+                    <button id="annuler">Annuler</button>
+                </div>
+                <div class="colonne">
+                    <button id="button">Valider</button>
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>

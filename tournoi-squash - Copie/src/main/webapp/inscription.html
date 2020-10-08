@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Inscription</title>
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="stylesheet.css" />
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#button').on('click', function () {
+                    $.ajax({
+                        url: './Servlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'subscribe',
+                            nom: $("#nom").val(),
+                            prenom: $("#prenom").val(),
+                            date: $("#date").val(),
+                            numeroDeTelephone: $("#numeroDeTelephone").val(),
+                            email: $("#email").val(),
+                            cemail: $("#cemail").val(),
+                            password: $("#motDePasse").val(),
+                            cpassword: $("#cmotDePasse").val(),
+                            sexe: $("#sexe").val()
+                        },
+                        dataType: 'json'
+                    })
+                            .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                if(response.etat === "0"){
+                                    alert("L'email ou le mot de passe ne correspond pas à sa confirmation");
+                                }else
+                                    document.location.href = "./accueilJoueur.html";
+                            })
+                            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always(function () { // Fonction toujours appelée
+
+                            });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="white-container" style="width: 50%">
+            <h1 style="text-align: center;">Inscription</h1>
+            <table style="width : 100%;">
+                <tr>
+                    <td style="width : 50%;">
+                        <input type="text" placeholder="Nom" name="nom" id="nom"/>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Prenom" name="Prenom" id="prenom" style="display: inline-block; width : 80%;"/>
+                        <select id='sexe' style="display: inline-block; width : 40px;">
+                            <option>H</option>
+                            <option>F</option>
+                        </select>
+                    </td>
+                    <!--<td>
+                        <select id='sexe' style="width : 40px;">
+                            <option>H</option>
+                            <option>F</option>
+                        </select>
+                    </td>-->
+                </tr>
+                <tr>
+                    <td style="width : 50%;">
+                        <input type="date" name="date" placeholder="Date de naissance" id="date"/>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width : 50%;">
+                        <input type="text" placeholder="Email" name="email" id="email"/>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Confirmez l'email" name="cemail" id="cemail"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width : 50%;">
+                        <input type="password" placeholder="Mot de Passe" name="motDePasse" id="motDePasse" />
+                    </td>
+                    <td>
+                        <input type="password" placeholder="Confirmez le mot de Passe" name="cmotDePasse" id="cmotDePasse" />
+                    </td>
+                </tr>
+            </table>
+            
+            
+            
+            <!--<div class="colonne">
+                <input type="text" placeholder="Nom" name="nom" id="nom"/>
+                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
+            </div>
+            <div class="colonne">
+                <div>
+                    <input type="text" placeholder="Prenom" style="display: inline-block; width: 80%;" name="Prenom" id="prenom"/>
+                    <select id='sexe' style="display: inline-block; width: 50px;">
+                        <option>H</option>
+                        <option>F</option>
+                    </select>
+                </div>
+                <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+            </div>
+            <input type="text" placeholder="Email" name="email" id="email"/>
+            <input type="text" placeholder="Confirmez l'email" name="cemail" id="cemail"/>
+            <input type="password" placeholder="Mot de Passe" name="motDePasse" id="motDePasse" />
+            <input type="password" placeholder="Confirmez le mot de Passe" name="cmotDePasse" id="cmotDePasse" />-->
+            <button id="button">S'inscrire</button>
+            <div class="text-centerer" style="margin-top: 20px;">
+                <a href="./connexion.html">J'ai déjà un compte</a>
+            </div>
+            
+        </div>
+
+    </body>
+</html>
