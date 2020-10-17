@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -69,16 +69,24 @@
                                 function (index, element) {
                                     if(element[0].autorisation === 0){
                                         var box = $('<div>', {
-                                            class : "list-container",
-                                            style: "text-align: center; width: 60%;"
+                                            class : "object"
                                         });
-                                        box.append($('<p>',{
-                                            text: element[0].prenom+" "+element[0].nom+" - "+element[0].email+" - "+element[0].telephone,
-                                            style: "font-weight: bold; margin-top:5px; margin-bottom:20px; display: inline-block; width: 63%;"
+                                        var d = $('<div>',{
+                                            class : "labelWrapper"
+                                        });
+                                        d.append($('<p>',{
+                                            text: element[0].prenom+" "+element[0].nom
                                         }));
-                                        box.append($('<button>', {
-                                            "text": "Accepter",
-                                            style: "width: 15%; height: 30px; text-align: center; display: inline-block; margin-right:2%;"
+                                        d.append($('<p>',{
+                                            text: element[0].email
+                                        }));
+                                        d.append($('<p>',{
+                                            text: element[0].telephone
+                                        }));
+                                        box.append(d);
+                                        var b = $('<div>');
+                                        b.append($('<button>', {
+                                            "text": "Accepter"
                                         })
                                             .on("click", function () {
                                                 $.ajax({
@@ -102,9 +110,8 @@
                                                         });
                                             })
                                         );
-                                        box.append($('<button>', {
-                                            "text": "Refuser",
-                                            style: "width: 15%; height: 30px; text-align: center; display: inline-block; margin-right:5%;"
+                                        b.append($('<button>', {
+                                            "text": "Refuser"
                                         })
                                             .on("click", function () {
                                                 $.ajax({
@@ -132,6 +139,7 @@
                                                         });
                                             })
                                         );
+                                        box.append(b);
                                         section.append(box);
                                     }
                                 });
@@ -164,64 +172,137 @@
                 });
             });
         </script>
+        <style>            
+            .element{
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+            
+            .column{
+                display: flex;
+                flex-direction: column;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+            
+            .left_box{
+                margin-top: auto;
+                margin-bottom: auto;
+                margin-right: 15px;
+            }
+            
+            button{
+                min-width: 20vw;
+            }
+            
+            .object {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                width: 90%;
+                border: solid;
+                border-color: #fbb03b;
+                margin: 5px auto 5px auto;
+            }
+            
+            .object button{
+                min-width: inherit;
+                margin : 5px;
+                padding: 5px;
+            }
+            
+            .object div{
+                width: 49%;
+            }
+            
+            .labelWrapper{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .labelWrapper p{
+                margin : auto 5px auto 5px;
+            }
+            
+            @media only screen and (max-width: 400px){
+                .object{
+                    flex-direction: column;
+                    align-content: center;
+                }
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong class="nom"></strong>
-                <br/>
-                Prenom : <strong class="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong class="nom"></strong>
+                        <br/>
+                        Prenom : <strong class="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" id="consult">Consulter les matchs</a>
-            <a class="navigation-button" id="classement">Classements</a>
-            <a class="navigation-button" id="users">Utilisateurs</a>
-            <a class="navigation-button" id="ajout">Ajouter un Sport</a>
-            <a class="navigation-button-select" id="compte">Mon Compte</a>
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="consult">Consulter les matchs</a>
+                    <a class="navigation-button" id="classement">Classements</a>
+                    <a class="navigation-button" id="users">Utilisateurs</a>
+                    <a class="navigation-button" id="ajout">Ajouter un Sport</a>
+                    <a class="navigation-button-select" id="compte">Mon Compte</a>
+                </div>
+
+                <section class="corps">
+                    <div class="left_box">
+                        <div class="element">
+                            <pre>Nom :    </pre>
+                            <p class="nom"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Prenom :    </pre>
+                            <p class="prenom"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Date de Naissance :    </pre>
+                            <p id="date"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Adresse mail :    </pre>
+                            <p id="email"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Telephone :    </pre>
+                            <p id="telephone"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Genre :    </pre>
+                            <p id="sexe"></p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <button id="mod">Modifier mes informations</button>
+                        <button id="mdp">Modifier mon mot de passe</button>
+                    </div>
+                </section>
+                <div id="autorisation">
+                    <p>Joueurs en attente d'acceptation</p>
+                    <hr>
+                </div>
+            </div>
         </div>
-
-        <section id="accueil">
-            <div class="white-container">
-                <div style="display: inline-block; width: 33%;">
-                    <p>Nom : </p>
-                    <p>Prenom : </p>
-                    <p>Date de Naissance : </p>
-                    <p>Adresse mail : </p>
-                    <p>Telephone : </p>
-                </div>
-                <div style="display: inline-block; width: 33%;">
-                    <p class="nom"></p>
-                    <p class="prenom"></p>
-                    <p id="date"></p>
-                    <p id="email"></p>
-                    <p id="telephone"></p>
-                </div>
-                <div style="display: inline-block; width: 33%;">
-                    <button id="mod" style="margin-top: 20px;margin-bottom: 20px;">Modifier mes informations</button>
-                    <button id="mdp" style="margin-top: 20px;margin-bottom: 20px;">Modifier mon mot de passe</button>
-                </div>
-            </div>
-            <div id="autorisation">
-                <p style="text-align: center; color: white; font-weight: bold;">Joueurs en attente d'acceptation</p>
-                <hr style="width: 60%;">
-            </div>
-        </section>
-
-
     </body>
 </html>

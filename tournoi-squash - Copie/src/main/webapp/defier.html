@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript"> 
             $('document').ready(function () {
                 var idUser = null;
@@ -47,58 +47,56 @@
                                 dataType: 'json'
                             })
                                     .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                        var div = $('#section');
+                                        var div = $('.section');
+                                        var ligne = $('<div>',{
+                                            class : "ligne"
+                                        });
+                                        ligne.append($('<p>', {
+                                            text : "Classement",
+                                            style : "width : 33%; text-align : left;"
+                                        }));
+                                        ligne.append($('<p>', {
+                                            text : "Joueur",
+                                            style : "width : 33%;"
+                                        }));
+                                        ligne.append($('<p>', {
+                                            style : "width : 33%;"
+                                        }));
+                                        div.append(ligne);
+                                        div.append($('<hr>'));
                                         $.each(response.levels,
                                             function (index, element) {
-                                                var box = $('<div>');
+                                                var box = $('<div>',{
+                                                    class : "ligne"
+                                                });
                                                 if(idUser === element.idUser){
-                                                    box.append($('<div>', {
-                                                        class : "list-container",
+                                                    box.append($('<p>', {
                                                         text : element.classement,
-                                                        style: "display: inline-block; width: 8%; margin-right: 2%; border: solid; border-color: #C0C0C0; border-width: 5px;"
+                                                        style: "font-weight : bold;"
                                                     }));
-                                                    var d = $('<div>',{
-                                                        class : "list-container",
-                                                        style: "display: inline-block; width: 50%; border: solid; border-color: #C0C0C0; border-width: 5px;"
-                                                    });
-                                                    d.append($('<div>',{
+                                                    box.append($('<p>', {
                                                         text : element.prenom+" "+element.nom,
-                                                        style: "display: inline-block;  width: 50%;"
+                                                        style: "font-weight : bold;"
                                                     }));
-                                                    var fe = $('<div>',{
-                                                        style: "display: inline-block;  width: 50%;"
-                                                    });
-                                                    d.append(fe);
-                                                    box.append(d);
-                                                }else{
-                                                    box.append($('<div>', {
-                                                        class : "list-container",
-                                                        text : element.classement,
-                                                        style: "display: inline-block; width: 8%; margin-right: 2%;"
-                                                    }));
-                                                    var d = $('<div>',{
-                                                        class : "list-container",
-                                                        style: "display: inline-block; width: 50%;"
-                                                    });
-                                                    d.append($('<div>',{
-                                                        text : element.prenom+" "+element.nom,
-                                                        style: "display: inline-block;  width: 50%;"
-                                                    }));
-                                                    var fe = $('<div>',{
-                                                        style: "display: inline-block;  width: 50%;"
-                                                    });
-                                                    fe.append($('<button>', {
+                                                    box.append($('<button>', {
                                                         "text": "Defier",
-                                                        style: "width: 50%; height: 30px; text-align: center;"
+                                                        style : "visibility : hidden;"
+                                                    }));
+                                                }else{
+                                                    box.append($('<p>', {
+                                                        text : element.classement
+                                                    }));
+                                                    box.append($('<p>',{
+                                                        text : element.prenom+" "+element.nom
+                                                    }));
+                                                    box.append($('<button>', {
+                                                        "text": "Defier"
                                                     })
                                                         .on("click", function () {
                                                             document.location.href = "creerMatch.html?idSport="+result+"&idA="+element.idUser+"&c="+element.classement;
                                                         })
                                                     );
-                                                    d.append(fe);
-                                                    box.append(d);
                                                 }
-
                                                 div.append(box);
                                             });
                                     })
@@ -157,39 +155,65 @@
                 
             });
         </script>
+        <style>
+            .section{
+                max-width: 600px;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .ligne{
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+            }
+            
+            p {
+                margin: 5px;
+            }
+            
+            button{
+                padding : 5px;
+                margin : 0;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("accueil");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/accueil2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/accueil.png";
-                    });
-               </script>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/accueil.png" id="accueil" alt="Accueil" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("accueil");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/accueil2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/accueil.png";
+                            });
+                       </script>
+                    </div>
+                </section>
+
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="sport"></a>
+                    <a class="navigation-button" id="classement">Classement</a>
+                    <a class="navigation-button-select" id="defier">Défier un joueur</a>
+                    <a class="navigation-button" id="historique">Historique</a>
+                </div>
+
+                <section class="section">
+                </section>
             </div>
-        </section>
-
-        <div id="navigation-bar">
-            <a class="navigation-button" id="sport"></a>
-            <a class="navigation-button" id="classement">Classement</a>
-            <a class="navigation-button-select" id="defier">Défier un joueur</a>
-            <a class="navigation-button" id="historique">Historique</a>
         </div>
-
-        <section id="section" style="text-align: center; margin-top: 20px;">
-        </section>
-
 
     </body>
 </html>

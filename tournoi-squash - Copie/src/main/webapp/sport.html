@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function accepte(idSport,id) {
                 $.ajax({
@@ -48,44 +48,33 @@
                     dataType: 'json'
                 })
                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            var div = $('#defies');
+                            var div = $('.defies');
                             $.each(response.matchs,
                                     function (index, element) {
                                         var box = $('<div>', {
-                                            class : "list-container"
+                                            "class" : "object"
                                         });
-                                        var d = $('<div>',{
-                                            style: "display: inline-block; width: 50%;"
-                                        });
-                                        d.append($('<p>', {
-                                            text : element.nom+" "+element.prenom+" vous defie le",
-                                            style: "margin: 0px;"
+                                        box.append($('<p>',{
+                                            "text" : element.nom+" "+element.prenom+" vous defie le "+element.date
                                         }));
-                                        d.append($('<p>', {
-                                            style: "font-weight: bold; margin: 0px;",
-                                            text : element.date
-                                        }));
-                                        box.append(d);
-                                        var r = $('<div>',{
-                                            style: "display: inline-block; width: 50%;"
+                                        var d = $('<div>', {
+                                            "class" : "buttonWrapper"
                                         });
-                                        r.append($('<button>', {
-                                            "text": "Accepter",
-                                            style: "width: 46%; margin: 0% 2% 2% 2%;"
+                                        d.append($('<button>', {
+                                            "text": "Accepter"
                                         })
                                             .on("click", function () {
                                                 accepte(idSport,element.id);
                                             })
                                         );
-                                        r.append($('<button>', {
-                                            "text": "Proposer une autre date",
-                                            style: "width: 46%; margin: 0% 2% 2% 2%;"
+                                        d.append($('<button>', {
+                                            "text": "Proposer une autre date"
                                         })
                                             .on("click", function () {
                                                 repousse(idSport,element.id);
                                             })
                                         );
-                                        box.append(r);
+                                        box.append(d);
                                         div.append(box);
                                     });
                         })
@@ -107,33 +96,26 @@
                     dataType: 'json'
                 })
                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            var div = $('#matchs');
+                            var div = $('.matchs');
                             $.each(response.matchs,
                                     function (index, element) {
                                         var box = $('<div>', {
-                                            class : "list-container"
+                                            "class" : "object"
                                         });
-                                        var d = $('<div>',{
-                                            style: "display: inline-block;",
-                                            width: "50%"
+                                        box.append($('<pre>',{
+                                            "text" : "Match contre "+element.nom+" "+element.prenom+"\n"+element.date
+                                        }));
+                                        var d = $('<div>', {
+                                            "class" : "buttonWrapper"
                                         });
-                                        d.append($('<span>', {
-                                            text : "Match contre "+element.nom+" "+element.prenom
-                                        }));
-                                        d.append($('<br/>'));
-                                        d.append($('<span>', {
-                                            style: "font-weight: bold;",
-                                            text : element.date
-                                        }));
-                                        box.append(d);
-                                        box.append($('<button>', {
-                                            "text": "Annoncer les resultats",
-                                            style: "width: 40%; margin-left: 5%;"
+                                        d.append($('<button>', {
+                                            "text": "Annoncer les resultats"
                                         })
                                             .on("click", function () {
                                                 annonce(idSport,element.id);
                                             })
                                         );
+                                        box.append(d);
                                         div.append(box);
                                     });
                         })
@@ -220,45 +202,96 @@
                 
             });
         </script>
+        <style>
+            .boxes{
+                width: 49%;
+            }
+            
+            @media only screen and (max-width: 700px){
+                .corps{
+                    flex-direction: column;
+                    align-content: center;
+                }
+                
+                .corps div{
+                    width: 100%;
+                }
+            }
+            
+            button {
+                padding: 2%;
+                margin : 5px;
+            }
+            
+            .object {
+                display: flex;
+                flex-direction: column;
+                width: 90%;
+                border: solid;
+                border-color: #fbb03b;
+                margin: 5px auto 5px auto;
+            }
+            .object p, .object pre{
+                margin-top: auto;
+                margin-bottom: auto;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .buttonWrapper{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("accueil");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/accueil2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/accueil.png";
-                    });
-               </script>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/accueil.png" id="accueil" alt="Accueil" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("accueil");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/accueil2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/accueil.png";
+                            });
+                       </script>
+                    </div>
+                </section>
+
+                <div class="navigation-bar">
+                    <a class="navigation-button-select" id="sport"></a>
+                    <a class="navigation-button" id="classement">Classement</a>
+                    <a class="navigation-button" id="defier">Défier un joueur</a>
+                    <a class="navigation-button" id="historique">Historique</a>
+                </div>
+
+                <section id="section">
+                    <div class="corps">
+                        <div class="boxes">
+                            <p>Les défis à relever</p>
+                            <hr>
+                            <div class="defies"></div>
+                        </div>
+                        <div class="boxes">
+                            <p>Vos matchs à venir</p>
+                            <hr>
+                            <div class="matchs"></div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
-        </section>
-
-        <div id="navigation-bar">
-            <a class="navigation-button-select" id="sport"></a>
-            <a class="navigation-button" id="classement">Classement</a>
-            <a class="navigation-button" id="defier">Défier un joueur</a>
-            <a class="navigation-button" id="historique">Historique</a>
         </div>
-
-        <section id="section">
-            <p class="text-centerer" style="margin: 0; color: white;">Les défis à relever</p>
-            <hr style="width: 60%;">
-            <div id="defies"></div>
-            <p class="text-centerer" style="margin: 0; color: white;">Vos matchs à venir</p>
-            <hr style="width: 60%;">
-            <div id="matchs"></div>
-        </section>
-
-
     </body>
 </html>

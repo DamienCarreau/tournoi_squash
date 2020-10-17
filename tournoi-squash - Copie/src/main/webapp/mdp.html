@@ -3,8 +3,9 @@
     <head>
         <title>Changer votre mot de passe</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css" />
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#button').on('click', function () {
@@ -36,31 +37,44 @@
 
                             });
                 });
-                
-                $('#annuler').on('click', function () {
-                    document.location.href = "javascript:history.go(-1)";
-                });
             });
         </script>
+        <style>
+            *{
+                font-family: Calibri, Arial, Helvetica, sans-serif;
+            }
+            
+            body{
+                background-image: url("./img/slider1.jpg");
+            }
+            
+            .dateNaissance{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .dateNaissance input{
+                margin-top: 0%;
+            }
+        </style>
     </head>
     <body>
-        <div class="white-container" style="width: 50%">
-            <h1 style="text-align: center;">Changer votre mot de passe</h1>
-            <p>Confirmez les informations suivantes :</p>
-            <div class="colonne">
-                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
-            </div>
-            <div class="colonne">
+        <div class="container flex">
+            <div class="divContainer">
+                <h1>Changer votre mot de passe</h1>
+                <p>Confirmez les informations suivantes :</p>
+                <input type="text" placeholder="Email" name="email" id="email"/>
+                <div class="dateNaissance">
+                    <pre>Date de Naissance :    </pre>
+                    <input type="date" name="date" placeholder="Date de naissance" id="date"/>
+                </div>
                 <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
-            </div>
-            <input type="text" placeholder="Email" name="email" id="email"/>
-            <input type="password" placeholder="Nouveau mot de passe" name="motDePasse" id="motDePasse" />
-            <input type="password" placeholder="Confirmez le mot de passe" name="cmotDePasse" id="cmotDePasse" />
-            <div class="colonne">
-                <button id="annuler">Annuler</button>
-            </div>
-            <div class="colonne">
+                <input type="password" placeholder="Nouveau mot de passe" name="motDePasse" id="motDePasse" />
+                <input type="password" placeholder="Confirmez le mot de passe" name="cmotDePasse" id="cmotDePasse" />
+                
                 <button id="button">Modifier mon mot de passe</button>
+                <a href="javascript:history.go(-1)">Annuler</a>
             </div>
         </div>
 

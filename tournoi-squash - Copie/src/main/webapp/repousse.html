@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function repousse(idSport,idMatch) {
                 $.ajax({
@@ -157,45 +157,75 @@
                 
             });
         </script>
+        <style>
+            .section{
+                display: flex;
+                flex-direction: column;
+                margin-top: 15px;
+                max-width: 800px;
+                min-width: 30vw;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .section p{
+                text-align: left;
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .section input{
+                margin-top: 5px;
+            }
+            
+            .section a {
+                margin-top: 15px;
+            }
+            
+            button{
+                margin : 0;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("accueil");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/accueil2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/accueil.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/accueil.png" id="accueil" alt="Accueil" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("accueil");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/accueil2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/accueil.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" id="sport"></a>
-            <a class="navigation-button" id="classement">Classement</a>
-            <a class="navigation-button" id="defier">Défier un joueur</a>
-            <a class="navigation-button" id="historique">Historique</a>
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="sport"></a>
+                    <a class="navigation-button" id="classement">Classement</a>
+                    <a class="navigation-button" id="defier">Défier un joueur</a>
+                    <a class="navigation-button" id="historique">Historique</a>
+                </div>
+
+                <section class="section">
+                    <p id="text"></p>
+                    <p>Proposer une nouvelle date :</p>
+                    <input type="date" name="date" placeholder="Nouvelle date" id="date"/>
+                    <button id="valider">Valider</button>
+                    <a class="choix" href="javascript:history.go(-1)">Annuler</a>
+                </section>
+            </div>
         </div>
-
-        <section id="accueil">
-            <div class="white-container">
-                <p id="text"></p>
-                <p>Proposer une nouvelle date :</p>
-                <input type="date" name="date" placeholder="Nouvelle date" id="date"/>
-                <button style="width: 50%; margin-left: 25%;" id="valider">Valider</button>
-            </div>
-        </section>
-
-
     </body>
 </html>
