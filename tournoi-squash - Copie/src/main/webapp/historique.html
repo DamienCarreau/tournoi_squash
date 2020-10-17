@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             $('document').ready(function () {
                 var idUser;
@@ -47,31 +47,34 @@
                                 dataType: 'json'
                             })
                                     .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                        var div = $('#section');
+                                        var div = $('.section');
                                         $.each(response.matchs,
                                                 function (index, element) {
                                                     var box = $('<div>', {
-                                                        class : "list-container",
-                                                        style: "text-align: center; width: 60%;"
+                                                        "class" : "object"
                                                     });
                                                     box.append($('<p>',{
                                                         text: element.date,
-                                                        style: "font-weight: bold; margin-top:5px; margin-bottom:5px;"
+                                                        style: "font-weight: bold;"
                                                     }));
-                                                    var d = $('<div>', {
-                                                        style: "margin-top:5px; margin-bottom:5px;"
-                                                    });
+                                                    var d = $('<div>',{
+                                                        class : "textWrapper"
+                                                    })
                                                     d.append($('<p>',{
-                                                        text: element.prenomJoueur1+" "+element.nomJoueur1,
-                                                        style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                                        text: element.prenomJoueur1+" "+element.nomJoueur1
                                                     }));
+                                                    if(element.scoreJ1 === -1 || element.scoreJ2 === -1){
+                                                        d.append($('<p>',{
+                                                            text: "Score non saisie"
+                                                        }));
+                                                    }else{
+                                                        d.append($('<p>',{
+                                                            text: element.scoreJ1+" - "+element.scoreJ2
+                                                        }));
+                                                    }
+                                                    
                                                     d.append($('<p>',{
-                                                        text: element.scoreJ1+" - "+element.scoreJ2,
-                                                        style: "display: inline-block; margin: 5px 25px 5px 25px"
-                                                    }));
-                                                    d.append($('<p>',{
-                                                        text: element.prenomJoueur2+" "+element.nomJoueur2,
-                                                        style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                                        text: element.prenomJoueur2+" "+element.nomJoueur2
                                                     }));
                                                     box.append(d);
                                                     div.append(box);
@@ -132,39 +135,68 @@
                 
             });
         </script>
+        <style>
+            .object {
+                display: flex;
+                flex-direction: column;
+                width: 90%;
+                border: solid;
+                border-color: #fbb03b;
+                margin: 5px auto 5px auto;
+            }
+            .object p, .object pre{
+                margin-top: auto;
+                margin-bottom: auto;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .textWrapper{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .textWrapper p {
+                width: 33%;
+                
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("accueil");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/accueil2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/accueil.png";
-                    });
-               </script>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div style="width: 25%;">
+                        <img src="./img/accueil.png" id="accueil" alt="Accueil" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("accueil");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/accueil2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/accueil.png";
+                            });
+                       </script>
+                    </div>
+                </section>
+
+                <div class="navigation-bar" style="margin-bottom: 25px;">
+                    <a class="navigation-button" id="sport"></a>
+                    <a class="navigation-button" id="classement">Classement</a>
+                    <a class="navigation-button" id="defier">Défier un joueur</a>
+                    <a class="navigation-button-select" id="historique">Historique</a>
+                </div>
+
+                <section class="section">
+                </section>
             </div>
-        </section>
-
-        <div id="navigation-bar" style="margin-bottom: 25px;">
-            <a class="navigation-button" id="sport"></a>
-            <a class="navigation-button" id="classement">Classement</a>
-            <a class="navigation-button" id="defier">Défier un joueur</a>
-            <a class="navigation-button-select" id="historique">Historique</a>
         </div>
-
-        <section id="section">
-        </section>
-
-
     </body>
 </html>

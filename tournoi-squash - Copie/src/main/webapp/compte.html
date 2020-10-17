@@ -4,8 +4,8 @@
         <title>Mon Compte</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css" />
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -95,65 +95,89 @@
                         });
             });
         </script>
+        <style>            
+            .element{
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+            
+            .column{
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .left_box{
+                margin-top: auto;
+                margin-bottom: auto;
+                margin-right: 15px;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong class="nom"></strong>
-                <br/>
-                Prenom : <strong class="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong class="nom"></strong>
+                        <br/>
+                        Prenom : <strong class="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
-            <a class="navigation-button-select">Mon Compte</a>
+                <div class="navigation-bar">
+                    <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
+                    <a class="navigation-button-select">Mon Compte</a>
+                </div>
+                
+                <div class="corps">
+                    <div class="left_box">
+                        <div class="element">
+                            <pre>Nom :    </pre>
+                            <p class="nom"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Prenom :    </pre>
+                            <p class="prenom"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Date de Naissance :    </pre>
+                            <p id="date"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Adresse mail :    </pre>
+                            <p id="email"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Telephone :    </pre>
+                            <p id="telephone"></p>
+                        </div>
+                        <div class="element">
+                            <pre>Genre :    </pre>
+                            <p id="sexe"></p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <button id="mod">Modifier mes informations</button>
+                        <button id="mdp">Modifier mon mot de passe</button>
+                        <button id="pause">Mettre en pause / réactiver mon compte</button>
+                        <button id="sup">Supprimer mon compte</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <section id="section">
-            <div class="white-container">
-                <div style="display: inline-block; width: 33%;" id="c1">
-                    <p>Nom : </p>
-                    <p>Prenom : </p>
-                    <p>Date de Naissance : </p>
-                    <p>Adresse mail : </p>
-                    <p>Telephone : </p>
-                    <p>Genre : </p>
-                </div>
-                <div style="display: inline-block; width: 33%;" id="c2">
-                    <p class="nom"></p>
-                    <p class="prenom"></p>
-                    <p id="date"></p>
-                    <p id="email"></p>
-                    <p id="telephone"></p>
-                    <p id="sexe"></p>
-                </div>
-                <div style="display: inline-block; width: 33%;">
-                    <button id="mod" style="margin-top: 20px;margin-bottom: 20px;">Modifier mes informations</button>
-                    <button id="mdp" style="margin-top: 20px;margin-bottom: 20px;">Modifier mon mot de passe</button>
-                </div>
-                <div style="margin-top: 20px; text-align: center;">
-                    <button id="pause" style="width: 70%">Mettre en pause / réactiver mon compte</button>
-                </div>
-                <div  style="margin-top: 20px; text-align: center;">
-                    <button id="sup" style="width: 70%">Supprimer mon compte</button>
-                </div>
-            </div>
-        </section>
-
-
     </body>
 </html>

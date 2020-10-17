@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -39,10 +39,6 @@
                 }
 
                 $('#disconnect-button').click(disconnect);
-                
-                $('#annuler').on('click', function () {
-                    document.location.href = "javascript:history.go(-1)";
-                });
                 
                 
                 $('#button').on('click', function () {
@@ -81,8 +77,8 @@
                     dataType: 'json'
                 })
                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            $('#nom').text(response.nom);
-                            $('#prenom').text(response.prenom);
+                            $('.nom').text(response.nom);
+                            $('.prenom').text(response.prenom);
                             idUser = response.id;
                         })
                         .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
@@ -118,50 +114,92 @@
 
             });
         </script>
+        <style>
+            button{
+                margin-top : 5%;
+                margin-bottom: 5%;
+                margin-left: auto;
+                margin-right: auto;
+                min-width: 25vw;
+            }
+            
+            @media only screen and (min-width: 500px){
+                button{
+                    padding: 15px 15px;
+                    margin-top : 15px;
+                    margin-bottom : 15px;
+                }
+            }
+            
+            @media only screen and (max-width: 700px){
+                button{
+                    min-width: 200px;
+                }
+            }
+            
+            .corpus{
+                margin-top: 15px;
+                text-align: left;
+            }
+            
+            .choix{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            
+            .choix select{
+                height: 25px;
+            }
+            
+            @media only screen and (max-width: 375px){
+                .choix{
+                    flex-direction: column;
+                    margin-bottom: 15px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong class="nom"></strong>
+                        <br/>
+                        Prenom : <strong class="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
-            <a class="navigation-button" href="./compte.html">Mon Compte</a>
-        </div>
+                <div class="navigation-bar">
+                    <a class="navigation-button" href="./accueilJoueur.html">Accueil</a>
+                    <a class="navigation-button" href="./compte.html">Mon Compte</a>
+                </div>
 
-        <section id="accueil">
-            <div class="white-container">
-                <div>
+                <section class="corpus">
                     <p id='text1'></p>
-                    <p style="display: inline-block;">Pour vous inscrire, entrez votre niveau :</p> 
-                    <select id='liste' style="display: inline-block;"></select>
-                </div>
-                <div class="colonne">
-                    <button id="annuler">Annuler</button>
-                </div>
-                <div class="colonne">
-                    <button id="button">Valider</button>
-                </div>
+                    <div class="choix">
+                        <pre>Pour vous inscrire, entrez votre niveau :  </pre> 
+                        <select id="liste"></select>
+                    </div>
+                </section>
+                <button id="button">Valider</button>
+                <a href="javascript:history.go(-1)">Annuler</a>
             </div>
-        </section>
-
+        </div>
 
     </body>
 </html>

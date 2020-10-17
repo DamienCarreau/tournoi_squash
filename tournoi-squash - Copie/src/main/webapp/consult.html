@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -87,6 +87,7 @@
                 });
      
                 $('#button').on('click', function () {
+                    $('#corps').empty();
                     $.ajax({
                         url: './Servlet',
                         method: 'GET',
@@ -97,35 +98,34 @@
                         dataType: 'json'
                     })
                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            $('.list-container').each(function(){
-                                $(this).remove();
-                            }); 
                             $('#sport').text(document.getElementById('liste').options[document.getElementById('liste').selectedIndex].text);
-                            var div = $('#section');
+                            var div = $('#corps');
                             $.each(response.matchs,
                                     function (index, element) {
                                         var box = $('<div>', {
-                                            class : "list-container",
-                                            style: "text-align: center; width: 60%;"
+                                            class : "object"
                                         });
                                         box.append($('<p>',{
                                             text: element.date,
-                                            style: "font-weight: bold; margin-top:5px; margin-bottom:5px;"
+                                            style: "font-weight: bold;"
                                         }));
                                         var d = $('<div>', {
-                                            style: "margin-top:5px; margin-bottom:5px;"
+                                            class : "textWrapper"
                                         });
                                         d.append($('<p>',{
-                                            text: element.prenomJoueur1+" "+element.nomJoueur1,
-                                            style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                            text: element.prenomJoueur1+" "+element.nomJoueur1
                                         }));
+                                        if(element.scoreJ1 === -1 || element.scoreJ2 === -1){
+                                            d.append($('<p>',{
+                                                text: "Score non saisie"
+                                            }));
+                                        }else{
+                                            d.append($('<p>',{
+                                                text: element.scoreJ1+" - "+element.scoreJ2
+                                            }));
+                                        }
                                         d.append($('<p>',{
-                                            text: element.scoreJ1+" - "+element.scoreJ2,
-                                            style: "display: inline-block; margin: 5px 25px 5px 25px"
-                                        }));
-                                        d.append($('<p>',{
-                                            text: element.prenomJoueur2+" "+element.nomJoueur2,
-                                            style: "margin-top:5px; margin-bottom:5px; display: inline-block;"
+                                            text: element.prenomJoueur2+" "+element.nomJoueur2
                                         }));
                                         box.append(d);
                                         div.append(box);
@@ -140,53 +140,96 @@
                 });
             });
         </script>
+        <style>
+            .section{
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+            }
+            
+            select{
+                min-width: 20vw;
+                height: 30px;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+            
+            button{
+                margin: 5px;
+                padding: 5px;
+            }
+            
+            .object {
+                display: flex;
+                flex-direction: column;
+                width: 90%;
+                border: solid;
+                border-color: #fbb03b;
+                margin: 5px auto 5px auto;
+            }
+            .object p, .object pre{
+                margin-top: auto;
+                margin-bottom: auto;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .textWrapper{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .textWrapper p {
+                width: 33%;
+                
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button-select" id="consult">Consulter les matchs</a>
-            <a class="navigation-button" id="classement">Classements</a>
-            <a class="navigation-button" id="users">Utilisateurs</a>
-            <a class="navigation-button" id="ajout">Ajouter un Sport</a>
-            <a class="navigation-button" id="compte">Mon Compte</a>
-        </div>
+                <div class="navigation-bar">
+                    <a class="navigation-button-select" id="consult">Consulter les matchs</a>
+                    <a class="navigation-button" id="classement">Classements</a>
+                    <a class="navigation-button" id="users">Utilisateurs</a>
+                    <a class="navigation-button" id="ajout">Ajouter un Sport</a>
+                    <a class="navigation-button" id="compte">Mon Compte</a>
+                </div>
 
-        <section id="section">
-            <div class="white-container" style="padding-bottom: 10px; padding-top: 10px; margin-bottom: 30px;">
-                <div style="display: inline-block; width: 33%;">
+                <section class="section">
                     <p>Choississez un sport :</p>
-                </div>
-                <div style="display: inline-block; width: 33%;">
-                    <select id='liste' style="width: 80%;"></select>
-                </div>
-                <div style="display: inline-block; width: 33%;">
+                    <select id='liste'></select>
                     <button id="button">Rechercher</button>
+                </section>
+                
+                <div>
+                    <p id="sport"></p>
+                    <hr>
+                    <div id="corps"></div>
                 </div>
             </div>
-            <p id="sport" style="text-align: center; color: white; margin-bottom: 5px;"></p>
-            <hr style="width: 60%;">
-        </section>
-
-
+        </div>
     </body>
 </html>

@@ -4,8 +4,8 @@
         <title>Accueil Joueur</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css" />
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
         <script type="text/javascript">
             function demande(idUser, idSport) {
                 $.ajax({
@@ -57,24 +57,19 @@
                     dataType: 'json'
                 })
                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                            var div = $('#liste');
+                            var div = $('.liste');
                             div.append($('<p>', {
                                 "text": "Choisissez votre sport :"
                             }));
                             $.each(response.sports,
                                     function (index, element) {
-                                        var box = $('<div>',{
-                                            "style": "text-align: center; margin-bottom:20px;"
-                                        });
-                                        box.append($('<button>', {
-                                            "class": "small-flex",
+                                        div.append($('<button>', {
                                             "text": element.nom,
-                                            "style": "width:50%;"
+                                            "type": "sport"
                                         })
                                                 .on("click", function () {
                                                     demande(idUser,element.id);
                                                 }));
-                                        div.append(box);
                                     });
                         })
                         .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
@@ -101,11 +96,11 @@
                             $('#nom').text(response.nom);
                             $('#prenom').text(response.prenom);
                             if(response.autorisation === 0){
-                                $('#liste').append($('<p>', {
+                                $('.liste').append($('<p>', {
                                     "text": "Votre compte est en attente d'acceptation par un administrateur.",
                                     "style": "font-size: 20px;"
                                 }));
-                                $('#liste').append($('<p>', {
+                                $('.liste').append($('<p>', {
                                     "text": "Vous pouvez les contacter grâce aux informations suivantes :",
                                     "style": "font-size: 20px;"
                                 }));
@@ -118,10 +113,9 @@
                                     dataType: 'json'
                                 })
                                         .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                            var div = $('#liste');
+                                            var div = $('.liste');
                                             $.each(response.admins,
                                                     function (index, element) {
-                                                        div.append($('<hr>'));
                                                         div.append($('<p>', {
                                                             "text": element.nom+" "+element.prenom+" - Email : "+element.email+" - Telephone : "+element.telephone,
                                                             "style": "font-size: 20px;"
@@ -138,7 +132,7 @@
                                 if(response.pause === 0)
                                     chargeSports(response.id);     
                                 else{
-                                    $('#liste').append($('<p>', {
+                                    $('.liste').append($('<p>', {
                                         "text": "Vous êtes actuellement en pause !",
                                         "style": "font-size: 20px;"
                                     }));
@@ -156,41 +150,68 @@
                 
             });
         </script>
+        <style>            
+            .liste {
+                display: flex;
+                flex-direction: column;
+                text-align: left;
+            }
+            
+            button[type="sport"]{
+                margin-top : 5%;
+                margin-bottom: 5%;
+                margin-left: auto;
+                margin-right: auto;
+                min-width: 25vw;
+            }
+            
+            @media only screen and (min-width: 500px){
+                button[type="sport"]{
+                    padding: 15px 15px;
+                    margin-top : 15px;
+                    margin-bottom : 15px;
+                }
+            }
+            
+            @media only screen and (max-width: 700px){
+                button[type="sport"]{
+                    min-width: 200px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button-select">Accueil</a>
-            <a class="navigation-button" href="./compte.html">Mon Compte</a>
-        </div>
-
-        <section id="accueil">
-            <div class="white-container">
-                <div id="liste">
+                <div class="navigation-bar">
+                    <a class="navigation-button-select">Accueil</a>
+                    <a class="navigation-button" href="./compte.html">Mon Compte</a>
                 </div>
-            </div>
-        </section>
 
+                <div class="liste"></div>
+            </div>
+        </div>
 
     </body>
 </html>

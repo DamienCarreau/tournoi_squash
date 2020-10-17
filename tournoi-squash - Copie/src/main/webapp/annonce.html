@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             $('document').ready(function () {
                 var idUser;
@@ -142,68 +142,93 @@
                 
             });
         </script>
+        <style>
+            .section{
+                display: flex;
+                flex-direction: column;
+            }
+            
+            td{
+                width: 33%;
+                border: solid;
+                border-color: #fbb03b;
+            }
+            
+            input{
+                width: 90%;
+                min-width: inherit;
+            }
+            
+            button{
+                max-width: 800px;
+                min-width: 40vw;
+                margin: 2vh auto 2vh auto;
+                padding: 2%;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/accueil.png" id="accueil" alt="Accueil" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("accueil");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/accueil2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/accueil.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/accueil.png" id="accueil" alt="Accueil" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("accueil");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/accueil2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/accueil.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" id="sport"></a>
-            <a class="navigation-button" id="classement">Classement</a>
-            <a class="navigation-button" id="defier">Défier un joueur</a>
-            <a class="navigation-button" id="historique">Historique</a>
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="sport"></a>
+                    <a class="navigation-button" id="classement">Classement</a>
+                    <a class="navigation-button" id="defier">Défier un joueur</a>
+                    <a class="navigation-button" id="historique">Historique</a>
+                </div>
+
+                <section class="section">
+                    <p id="text"></p>
+                    <table>
+                        <tr>
+                            <td style="border : none;"></td>
+                            <td id="joueur1"></td>
+                            <td id="joueur2"></td>
+                        </tr>
+                        <tr>
+                            <td>Vainqueur</td>
+                            <td>
+                                <input type="radio" name="groupe" id="j1" value="">
+                            </td>
+                            <td >
+                                <input type="radio" name="groupe" id="j2" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Points</td>
+                            <td>
+                                <input type="text" id="scoreJ1" placeholder="Score"/>
+                            </td>
+                            <td>
+                                <input type="text" id="scoreJ2" placeholder="Score"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <button id="valider">Valider</button>
+                    <a class="choix" href="javascript:history.go(-1)">Annuler</a>
+                </section>
+            </div>
         </div>
-
-        <section id="accueil">
-            <div class="white-container">
-                <p id="text"></p>
-                <table style="width: 100%; text-align: center;">
-                    <tr>
-                        <td style="width: 33%;"></td>
-                        <td style="width: 33%;" id="joueur1"></td>
-                        <td style="width: 33%;" id="joueur2"></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 33%;">Vainqueur</td>
-                        <td style="width: 33%;">
-                            <input type="radio" name="groupe" id="j1" value="">
-                        </td>
-                        <td style="width: 33%;">
-                            <input type="radio" name="groupe" id="j2" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 33%;">Points</td>
-                        <td style="width: 33%;">
-                            <input type="text" id="scoreJ1" placeholder="Score" style="width: 50%;"/>
-                        </td>
-                        <td style="width: 33%;">
-                            <input type="text" id="scoreJ2" placeholder="Score" style="width: 50%;"/>
-                        </td>
-                    </tr>
-                </table>
-                <button style="width: 50%; margin-left: 25%;" id="valider">Valider</button>
-            </div>
-        </section>
-
-
     </body>
 </html>

@@ -4,8 +4,8 @@
         <title>Modifier mes informations</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css" />
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
         <script type="text/javascript">
             
             var id;
@@ -27,11 +27,6 @@
             $(document).ready(function () {
 
                 $('#disconnect-button').click(disconnect);
-                
-                $('#annuler').on('click', function () {
-                    //document.location.href = "./connexion.html";
-                    document.location.href = "javascript:history.go(-1)";
-                });
                 
                 $('#button').on('click', function () {
                     $.ajax({
@@ -91,58 +86,92 @@
                         });
             });
         </script>
+        <style>                          
+            .corps{
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-content: center;
+            }
+                          
+            input{
+                margin: auto;
+            }
+            
+            input[type="date"]{
+                min-width: 250px;
+            }
+            
+            @media only screen and (max-width: 700px){
+                input input[type="date"]{
+                    min-width: auto;
+                }
+            }
+            
+            .choix{
+                margin-bottom: 5%;
+                margin-left: auto;
+                margin-right: auto;
+                min-width: 25vw;
+            }
+            
+            @media only screen and (min-width: 500px){
+                .choix{
+                    padding: 15px 15px;
+                    margin-bottom : 15px;
+                }
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong class="nom"></strong>
-                <br/>
-                Prenom : <strong class="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong class="nom"></strong>
+                        <br/>
+                        Prenom : <strong class="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
+                <h1 class="title">Modifier mes informations</h1>
+                <div class="corps">  
+                    <div class="element">
+                        <pre>Nom :                             </pre>
+                        <input type="text" id="nom"/>
+                    </div>
+                    <div class="element">
+                        <pre>Prenom :                        </pre>
+                        <input type="text" id="prenom"/>
+                    </div>
+                    <div class="element">
+                        <pre>Date de Naissance :     </pre>
+                        <input type="date" id="date"/>
+                    </div>
+                    <div class="element">
+                        <pre>Adresse mail :               </pre>
+                        <input type="text" id="email"/>
+                    </div>
+                    <div class="element">
+                        <pre>Telephone :                   </pre>
+                        <input type="text" id="telephone"/>
+                    </div>                    
+                </div>
+                <button id="button" class="choix">Modifier mes informations</button>
+                <a class="choix" href="javascript:history.go(-1)">Annuler</a>
             </div>
-        </section>
-
-        <section id="accueil">
-            <div class="white-container">
-                <h1 class="text-centerer">Modifier mes informations</h1>
-                <div style="display: inline-block; width: 33%;">
-                    <p>Nom : </p>
-                    <p>Prenom : </p>
-                    <p>Date de Naissance : </p>
-                    <p>Adresse mail : </p>
-                    <p>Telephone : </p>
-                </div>
-                <div style="display: inline-block; width: 33%;">
-                    <input type="text" id="nom" style="margin: 0; height: 35px;"/>
-                    <input type="text" id="prenom" style="margin: 0; height: 35px;"/>
-                    <input type="date" id="date" style="margin: 0; height: 35px;"/>
-                    <input type="text" id="email" style="margin: 0; height: 35px;"/>
-                    <input type="text" id="telephone" style="margin: 0; margin-bottom: 20px; height: 35px;"/>
-                </div>
-                <hr>
-                    <input type="password" placeholder="Confirmez votre mot de passe" name="motDePasse" id="motDePasse" />
-                <hr>
-                <div class="colonne">
-                    <button id="annuler">Annuler</button>
-                </div>
-                <div class="colonne">
-                    <button id="button">Modifier mes informations</button>
-                </div>
-            </div>
-        </section>
-
-
+        </div>
     </body>
 </html>

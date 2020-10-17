@@ -3,8 +3,9 @@
     <head>
         <title>Mettre en pause son compte</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             $(document).ready(function () {
                 var id = 0;
@@ -62,32 +63,64 @@
 
                             });
                 });
-                
-                $('#annuler').on('click', function () {
-                    //document.location.href = "./connexion.html";
-                    document.location.href = "javascript:history.go(-1)";
-                });
             });
         </script>
+        <style>  
+            
+            input{
+                margin: auto;
+            }
+            
+            input[type="date"]{
+                min-width: 250px;
+            }
+            
+            @media only screen and (max-width: 700px){
+                input input[type="date"]{
+                    min-width: auto;
+                }
+            }
+            
+            .corps{
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-content: center;
+            }
+            
+            .choix{
+                margin-left: auto;
+                margin-right: auto;
+                min-width: 25vw;
+            }
+        </style>
     </head>
     <body>
-        <div class="white-container" style="width: 50%">
-            <h1 style="text-align: center;" id="titre">Mettre en pause</h1>
-            <p>Confirmez les informations suivantes :</p>
-            <div class="colonne">
-                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
-                <input type="text" placeholder="Email" name="email" id="email"/>
-            </div>
-            <div class="colonne">
-                <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
-                <input type="password" placeholder="Mot de passe" name="motDePasse" id="motDePasse" />
-            </div>
-            <div class="colonne">
-                <button id="annuler">Annuler</button>
-            </div>
-            <div class="colonne">
+        <div class="container flex">
+            <div class="divContainer">
+                <h1 id="titre" class="title">Mettre en pause</h1>
+                <p>Confirmez les informations suivantes :</p>
+                <div class="corps">
+                    <div class="element">
+                        <pre>Email :                        </pre>
+                        <input type="text" placeholder="Email" name="email" id="email"/>
+                    </div>
+                    <div class="element">
+                        <pre>Date de Naissance :  </pre>
+                        <input type="date" id="date"/>
+                    </div>
+                    <div class="element">
+                        <pre>Mot de passe :           </pre>
+                        <input type="password" placeholder="Mot de passe" name="motDePasse" id="motDePasse" />
+                    </div>
+                    <div class="element">
+                        <pre>Telephone :                </pre>
+                        <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+                    </div>
+                </div>
                 <button id="button">Mettre en pause mon compte</button>
-            </div>
+                <a class="choix" href="javascript:history.go(-1)">Annuler</a>
+            </div>            
         </div>
 
     </body>
