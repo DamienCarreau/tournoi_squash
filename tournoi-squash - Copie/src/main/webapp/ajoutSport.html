@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -60,10 +60,6 @@
                     document.location.href = "./accueilAdmin.html";
                 });
                 
-                $('#annuler').on('click', function () {
-                    document.location.href = "javascript:history.go(-1)";
-                });
-                
                 $('#classement').on('click', function () {
                     document.location.href = "./classementAdmin.html";
                 });
@@ -91,57 +87,93 @@
                 });
             });
         </script>
+        <style>
+            .section{
+                display: flex;
+                flex-direction: column;
+                
+            }
+            
+            .inlineElement{
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin-left: auto;
+                margin-right: auto;
+                width: 80%;
+            }
+            
+            input {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                min-width: 40vw;
+            }
+            
+            button{
+                padding: 2%;
+                max-width: 500px;
+                min-width: 25vw;
+                margin : 15px auto;
+            }
+            
+            .section p{
+                margin-top: 15px;
+                margin-bottom: 5px;
+            }
+            
+            @media only screen and (max-width: 600px){
+                input{
+                    width: 100%;
+                }
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
-            </div>
-        </section>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
 
-        <div id="navigation-bar">
-            <a class="navigation-button" id="consult">Consulter les matchs</a>
-            <a class="navigation-button" id="classement">Classements</a>
-            <a class="navigation-button" id="users">Utilisateurs</a>
-            <a class="navigation-button-select" id="ajout">Ajouter un Sport</a>
-            <a class="navigation-button" id="compte">Mon Compte</a>
-        </div>
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="consult">Consulter les matchs</a>
+                    <a class="navigation-button" id="classement">Classements</a>
+                    <a class="navigation-button" id="users">Utilisateurs</a>
+                    <a class="navigation-button-select" id="ajout">Ajouter un Sport</a>
+                    <a class="navigation-button" id="compte">Mon Compte</a>
+                </div>
 
-        <section id="section">
-            <div class="white-container">
-                <p>Vous souhaitez ajouter un sport :</p>
-                <div>
-                    <p style="display: inline-block;">Nom du sport : </p>
-                    <input type="text" id="nomSport" style="display: inline-block; width: 25%;"/>
-                </div>
-                <div>
-                    <p style="display: inline-block;">Niveaux possibles : </p>
-                    <input type="text" id="niveaux" placeholder="Ordre décroissant - Séparés par des virgules" style="display: inline-block; width: 50%;"/>
-                </div>
-                <div class="colonne">
-                    <button id="annuler">Annuler</button>
-                </div>
-                <div class="colonne">
+                <section class="section">
+                    <p>Vous souhaitez ajouter un sport :</p>
+                    <div class="inlineElement">
+                        <p>Nom du sport : </p>
+                        <input type="text" id="nomSport"/>
+                    </div>
+                    <div class="inlineElement">
+                        <p>Niveaux possibles : </p>
+                        <input type="text" id="niveaux" placeholder="Ordre décroissant - Séparés par des virgules"/>
+                    </div>
                     <button id="button">Ajouter ce sport</button>
-                </div>
+                    <a href="javascript:history.go(-1)">Annuler</a>
+                </section>
             </div>
-        </section>
-
-
+        </div>
     </body>
 </html>

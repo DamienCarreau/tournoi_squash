@@ -5,8 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
-
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function connect() {
                 var mail = $("#mail").val();
@@ -48,26 +47,24 @@
 
             $('document').ready(function () {
                 $('#connect-button').click(connect);
-
-                if($(window).width() < 1000){
-                    $('#banniere').width('80%');
-                    alert("Nous vous conseillons d'utiliser la version ordinateur. (Options -> Version pour ordinateur)");
-                }
             })
         </script>
+        
+        <style>
+            body{
+                background-image: url("./img/slider1.jpg");
+            }
+        </style>
     </head>
     <body>
-        <div class="white-container" id="banniere" style="width: 30%; height: 80%;">
-            <h1 class="text-centerer">Connexion</h1>
-            <input type="text" id="mail" placeholder="Email"/>
-            <input type="password" id="password" placeholder="Mot de passe"/>
-            <p>
-            <button id="connect-button">Se connecter</button>
-            <div class="text-centerer" style="margin-bottom: 20px;">
-                <a href="./inscription.html" class="padding-medium">S'inscrire</a>  
-            </div>
-            <div class="text-centerer">
-                <a href="./mdp.html" class="padding-medium">Mot de passe oublié</a>
+        <div class="container flex">
+            <div class="divContainer">
+                <h1>Connexion</h1>
+                <input type="text" id="mail" placeholder="Email"/>
+                <input type="password" id="password" placeholder="Mot de passe"/>
+                <button id="connect-button">Se connecter</button>
+                <a href="./inscription.html">S'inscrire</a>  
+                <a href="./mdp.html">Mot de passe oublié</a>    
             </div>
         </div>
     </body>

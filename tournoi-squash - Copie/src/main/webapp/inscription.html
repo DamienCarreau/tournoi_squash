@@ -3,8 +3,9 @@
     <head>
         <title>Inscription</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css" />
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#button').on('click', function () {
@@ -40,80 +41,80 @@
                 });
             });
         </script>
+        
+        <style>
+            
+            body{
+                background-image: url("./img/slider1.jpg");
+            }
+            
+            input{
+                min-width: auto;
+                margin: 2% 0;
+            }
+            
+            a{
+                padding: 10px 10px;
+            }
+            
+            .divContainer {
+                padding: 5vw 5vw;
+                min-width: 30vw;
+            }
+            
+            .form{
+                min-width: 20vw;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+            }
+            
+            .genre, .dateNaissance{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .genre select{
+                min-width: 5vw;
+                height: 20px;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+            
+            .dateNaissance input{
+                margin-top: 0%;
+            }
+        </style>
     </head>
     <body>
-        <div class="white-container" style="width: 50%">
-            <h1 style="text-align: center;">Inscription</h1>
-            <table style="width : 100%;">
-                <tr>
-                    <td style="width : 50%;">
-                        <input type="text" placeholder="Nom" name="nom" id="nom"/>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Prenom" name="Prenom" id="prenom" style="display: inline-block; width : 80%;"/>
-                        <select id='sexe' style="display: inline-block; width : 40px;">
+        <div class="container flex">
+            <div class="divContainer">
+                <h1>Inscription</h1>
+                     
+                <div class="form">
+                    <input type="text" placeholder="Nom" name="nom" id="nom"/>
+                    <input type="text" placeholder="Prenom" name="Prenom" id="prenom"/>
+                    <div class="genre">
+                        <pre>Genre :    </pre>
+                        <select id='sexe'>
                             <option>H</option>
                             <option>F</option>
                         </select>
-                    </td>
-                    <!--<td>
-                        <select id='sexe' style="width : 40px;">
-                            <option>H</option>
-                            <option>F</option>
-                        </select>
-                    </td>-->
-                </tr>
-                <tr>
-                    <td style="width : 50%;">
+                    </div>
+                    <div class="dateNaissance">
+                        <pre>Date de Naissance :    </pre>
                         <input type="date" name="date" placeholder="Date de naissance" id="date"/>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width : 50%;">
-                        <input type="text" placeholder="Email" name="email" id="email"/>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Confirmez l'email" name="cemail" id="cemail"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width : 50%;">
-                        <input type="password" placeholder="Mot de Passe" name="motDePasse" id="motDePasse" />
-                    </td>
-                    <td>
-                        <input type="password" placeholder="Confirmez le mot de Passe" name="cmotDePasse" id="cmotDePasse" />
-                    </td>
-                </tr>
-            </table>
-            
-            
-            
-            <!--<div class="colonne">
-                <input type="text" placeholder="Nom" name="nom" id="nom"/>
-                <input type="date" name="date" placeholder="Date de naissance" id="date"/>
-            </div>
-            <div class="colonne">
-                <div>
-                    <input type="text" placeholder="Prenom" style="display: inline-block; width: 80%;" name="Prenom" id="prenom"/>
-                    <select id='sexe' style="display: inline-block; width: 50px;">
-                        <option>H</option>
-                        <option>F</option>
-                    </select>
+                    </div>
+                    <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
+                    <input type="text" placeholder="Email" name="email" id="email"/>
+                    <input type="text" placeholder="Confirmez l'email" name="cemail" id="cemail"/>
+                    <input type="password" placeholder="Mot de Passe" name="motDePasse" id="motDePasse" />
+                    <input type="password" placeholder="Confirmez le mot de Passe" name="cmotDePasse" id="cmotDePasse" />
                 </div>
-                <input type="text" placeholder="N° de Telephone" name="numeroDeTelephone" id="numeroDeTelephone"/>
-            </div>
-            <input type="text" placeholder="Email" name="email" id="email"/>
-            <input type="text" placeholder="Confirmez l'email" name="cemail" id="cemail"/>
-            <input type="password" placeholder="Mot de Passe" name="motDePasse" id="motDePasse" />
-            <input type="password" placeholder="Confirmez le mot de Passe" name="cmotDePasse" id="cmotDePasse" />-->
-            <button id="button">S'inscrire</button>
-            <div class="text-centerer" style="margin-top: 20px;">
+                
+                <button id="button">S'inscrire</button>
                 <a href="./connexion.html">J'ai déjà un compte</a>
             </div>
-            
         </div>
 
     </body>

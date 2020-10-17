@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="stylesheet.css" />
+        <link rel="stylesheet" href="styles.css" />
         <script type="text/javascript">
             function disconnect() {
                 $.ajax({
@@ -78,12 +78,14 @@
                             $.each(response.joueurs,
                                 function (index, element) {
                                     var box = $('<div>', {
-                                        class : "list-container",
-                                        style: "text-align: center; width: 60%;"
+                                        class : "user"
                                     });
+                                    var buttonWrapper = $('<div>',{
+                                        class : "buttonWrapper"
+                                    })
                                     box.append($('<p>',{
                                         text: element[0].prenom+" "+element[0].nom+" - "+element[0].email+" - "+element[0].telephone+" - "+element[0].sexe,
-                                        style: "font-weight: bold; margin-top:5px; margin-bottom:20px;"
+                                        style: "font-weight: bold;"
                                     }));
                                     
                                     if(element[0].pause === 1){
@@ -92,28 +94,23 @@
                                             style: "margin: 5px 20px 5px 0;"
                                         }));
                                         var f = $('<div>',{
-                                            style: "width: 50%; display: inline-block; margin-top: 15px;",
                                             id: "class"+element[0].id
                                         });
                                         f.append($('<button>', {
-                                            "class": "small-flex",
                                             "text": "Réactiver ce joueur",
-                                            "id": "bouton"+element[0].id,
-                                            "style": "width:80%;  height: 30px; margin-right: 2%;"
+                                            "id": "bouton"+element[0].id
                                         })
                                             .on("click", function () {
                                                 document.getElementById("bouton"+element[0].id).remove();
                                                 var c = $('#class'+element[0].id);
                                                 c.append($('<button>',{
-                                                    text: "Annuler",
-                                                    style: "display: inline-block; width: 45%; height: 30px;"
+                                                    text: "Annuler"
                                                 })
                                                     .on("click", function () {
                                                         document.location.href = "./users.html";
                                                     }));
                                                 c.append($('<button>',{
-                                                    text: "Réactiver ce joueur",
-                                                    style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                                    text: "Réactiver ce joueur"
                                                 })
                                                     .on("click", function () {
                                                         $.ajax({
@@ -137,40 +134,34 @@
                                                                 });
                                                     }));
                                             }));
-                                        box.append(f);
+                                        buttonWrapper.append(f);
                                     }else{
                                         for(let cpt = 1; cpt <= element[0].cpt; cpt++){
-                                            var d = $('<div>');
-                                            var fe = $('<div>', {
-                                                style: "margin-top:5px; margin-bottom:5px; width: 50%; display: inline-block;"
+                                            var d = $('<div>',{
+                                                class : "niveau"
                                             });
-                                            fe.append($('<p>',{
+                                            d.append($('<p>',{
                                                 text: element[cpt].sport+" - Niveau : "+element[cpt].niveau,
                                                 style: "margin: 5px 0 5px 0;"
                                             }));
                                             var pe = $('<div>', {
-                                                id: element[0].id+"class"+element[cpt].idLevel,
-                                                style: "margin-top:5px; margin-bottom:5px; width: 50%; display: inline-block;"
+                                                id: element[0].id+"class"+element[cpt].idLevel
                                             });
                                             pe.append($('<button>', {
-                                                "class": "small-flex",
                                                 "text": "Modifier son niveau",
-                                                id: element[0].id+"bouton"+element[cpt].idLevel,
-                                                "style": "width:80%; height: 30px;"
+                                                id: element[0].id+"bouton"+element[cpt].idLevel
                                             })
                                                 .on("click", function () {
                                                     document.getElementById(element[0].id+"bouton"+element[cpt].idLevel).remove();
                                                     var c = $('#'+element[0].id+'class'+element[cpt].idLevel);
                                                     c.append($('<button>',{
-                                                        text: "Annuler",
-                                                        style: "display: inline-block; width: 30%; height: 30px;"
+                                                        text: "Annuler"
                                                     })
                                                         .on("click", function () {
                                                             document.location.href = "./users.html";
                                                         }));
                                                     var select = $('<select>',{
-                                                        id:"select"+element[0].id,
-                                                        style: "width: 16%; margin-left: 2%;"
+                                                        id:"select"+element[0].id
                                                     });
                                                     $.ajax({
                                                         url: './Servlet',
@@ -195,8 +186,7 @@
                                                             });
                                                     c.append(select);
                                                     c.append($('<button>',{
-                                                        text: "Changer",
-                                                        style: "display: inline-block; width: 30%; height: 30px; margin-left: 2%;"
+                                                        text: "Changer"
                                                     })
                                                         .on("click", function () {
                                                             $.ajax({
@@ -221,34 +211,29 @@
                                                                     });
                                                         }));
                                                 }));
-                                            d.append(fe);
                                             d.append(pe);
                                             box.append(d);
                                         }
                                         
                                         var f = $('<div>',{
-                                            id: "class"+element[0].id,
-                                            style: "width: 50%; display: inline-block; margin-top: 15px;"
+                                            id: "class"+element[0].id
                                         });
                                         f.append($('<button>', {
-                                            "class": "small-flex",
                                             "text": "Mettre en pause ce joueur",
-                                            id: "bouton"+element[0].id,
-                                            "style": "width:80%;  height: 30px; margin-right: 2%;"
+                                            id: "bouton"+element[0].id
                                         })
                                             .on("click", function () {
                                                 document.getElementById("bouton"+element[0].id).remove();
+                                                document.getElementById("2class"+element[0].id).remove();
                                                 var c = $('#class'+element[0].id);
                                                 c.append($('<button>',{
-                                                    text: "Annuler",
-                                                    style: "display: inline-block; width: 45%; height: 30px;"
+                                                    text: "Annuler"
                                                 })
                                                     .on("click", function () {
                                                         document.location.href = "./users.html";
                                                     }));
                                                 c.append($('<button>',{
-                                                    text: "Mettre en pause",
-                                                    style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                                    text: "Mettre en pause"
                                                 })
                                                     .on("click", function () {
                                                         $.ajax({
@@ -272,33 +257,29 @@
                                                                 });
                                                     }));
                                             }));
-                                        box.append(f);
+                                        buttonWrapper.append(f);
                                         
                                     }
                                         
-                                    var f = $('<div>',{
-                                        style: "width: 50%; display: inline-block; margin-top: 15px;",
+                                    var da = $('<div>',{
                                         id: "2class"+element[0].id
                                     });
-                                    f.append($('<button>', {
-                                        "class": "small-flex",
+                                    da.append($('<button>', {
                                         "text": "Supprimer ce joueur",
-                                        id: "2bouton"+element[0].id,
-                                        "style": "width:80%;  height: 30px; margin-left 2%;"
+                                        id: "2bouton"+element[0].id
                                     })
                                         .on("click", function () {
+                                            document.getElementById("class"+element[0].id).remove();
                                             document.getElementById("2bouton"+element[0].id).remove();
                                             var c = $('#2class'+element[0].id);
                                             c.append($('<button>',{
-                                                text: "Annuler",
-                                                style: "display: inline-block; width: 45%; height: 30px;"
+                                                text: "Annuler"
                                             })
                                                 .on("click", function () {
                                                     document.location.href = "./users.html";
                                                 }));
                                             c.append($('<button>',{
-                                                text: "Supprimer ce joueur",
-                                                style: "display: inline-block; width: 45%; height: 30px; margin-left: 5%;"
+                                                text: "Confirmer la suppression"
                                             })
                                                 .on("click", function () {
                                                     $.ajax({
@@ -322,7 +303,8 @@
                                                             });
                                                 }));
                                         }));
-                                    box.append(f);
+                                    buttonWrapper.append(da);
+                                    box.append(buttonWrapper);
                                     
                                     div.append(box);
                                     cpt++;
@@ -337,40 +319,85 @@
                         
             });
         </script>
+        <style>
+            .buttonWrapper{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 1em;
+                margin-bottom: 1em;
+            }
+            
+            
+            .user button{
+                margin-left: 5px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .niveau{
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin: 10px auto;
+                min-width: 20vw;
+            }
+            
+            @media only screen and (max-width: 500px){
+                .niveau{
+                    justify-content: center;
+                }
+            }
+            
+            .user{
+                display: flex;
+                flex-direction: column;
+                border: solid;
+                border-color: #fbb03b;
+                margin: 15px 0;
+            }
+            
+            button{
+                margin: 0;
+                padding: 5px;
+            }
+        </style>
     </head>
     <body>
-        <section class="top-bar">
-            <p id="client-data">
-                Nom : <strong id="nom"></strong>
-                <br/>
-                Prenom : <strong id="prenom"></strong>
-            </p>
-            <h1>Tournoi - Squash</h1>
-            <div style="width: 25%;">
-                <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="padding-left: 20%; height: 50px;" >
-                <script type="text/javascript">
-                    var im = document.getElementById("disconnect-button");
-                    im.addEventListener("mouseover" ,function(){
-                        im.src = "./img/deco2.png";      
-                    }); 
-                    im.addEventListener("mouseleave" ,function(){
-                        im.src = "./img/deco.png";
-                    });
-               </script>
+        <div class="container flex">
+            <div class="divContainer">
+                <section class="top-bar">
+                    <p id="client-data">
+                        Nom : <strong id="nom"></strong>
+                        <br/>
+                        Prenom : <strong id="prenom"></strong>
+                    </p>
+                    <h1>Tournoi - Squash</h1>
+                    <div>
+                        <img src="./img/deco.png" id="disconnect-button" alt="Déconnexion" style="height: 50px;" >
+                        <script type="text/javascript">
+                            var im = document.getElementById("disconnect-button");
+                            im.addEventListener("mouseover" ,function(){
+                                im.src = "./img/deco2.png";      
+                            }); 
+                            im.addEventListener("mouseleave" ,function(){
+                                im.src = "./img/deco.png";
+                            });
+                       </script>
+                    </div>
+                </section>
+
+                <div class="navigation-bar">
+                    <a class="navigation-button" id="consult">Consulter les matchs</a>
+                    <a class="navigation-button" id="classement">Classements</a>
+                    <a class="navigation-button-select" id="users">Utilisateurs</a>
+                    <a class="navigation-button" id="ajout">Ajouter un Sport</a>
+                    <a class="navigation-button" id="compte">Mon Compte</a>
+                </div>
+
+                <section id="section">
+                </section>
             </div>
-        </section>
-
-        <div id="navigation-bar">
-            <a class="navigation-button" id="consult">Consulter les matchs</a>
-            <a class="navigation-button" id="classement">Classements</a>
-            <a class="navigation-button-select" id="users">Utilisateurs</a>
-            <a class="navigation-button" id="ajout">Ajouter un Sport</a>
-            <a class="navigation-button" id="compte">Mon Compte</a>
         </div>
-
-        <section id="section">
-        </section>
-
-
     </body>
 </html>
