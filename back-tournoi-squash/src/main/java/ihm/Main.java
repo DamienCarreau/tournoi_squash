@@ -26,13 +26,13 @@ public class Main {
         JpaUtil.init();
 
         //INIT
-        inscriptionJoueur();
+        /*inscriptionJoueur();
         inscriptionAdmin();
         creationSport();
         inscriptionSport();
         creationMatch();
         accepteMatch();
-        testerAnnoncerResultats();
+        testerAnnoncerResultats();*/
 
         //TESTS :
         //testerAuthentification();
@@ -67,17 +67,7 @@ public class Main {
     public static void essaiRapide(){
         Service service = new Service();
 
-        Sport s = service.getSport(2L);
-
-        Joueur pelo = service.getJoueur(17L);
-        Joueur pele = service.getJoueur(19L);
-        Joueur pe = service.getJoueur(6L);
-        
-        /*Level l1 = new Level(pelo,s,"L1");
-        boolean b = service.inscriptionSport(l1);
-        
-        Level l2 = new Level(pele,s,"M3");
-        b = service.inscriptionSport(l2);*/
+        service.majDate();
 
        
     }
@@ -198,7 +188,7 @@ public class Main {
         matchs = new Matchs[7];
         
         matchs[0] = new Matchs(sports[0], joueurs[0], joueurs[2], new Date("06/17/2020"));
-        Long id1 = service.creerMatch(matchs[0]);
+        String id1 = service.creerMatch(matchs[0]);
         /*if (id1 != null) {
             System.out.println(matchs[0].toString());
         } else {
@@ -206,7 +196,7 @@ public class Main {
         }*/
 
         matchs[1] = new Matchs(sports[0], joueurs[2], joueurs[1], new Date("06/14/2020"));
-        Long id2 = service.creerMatch(matchs[1]);
+        String id2 = service.creerMatch(matchs[1]);
         /*if (id2 != null) {
             System.out.println(matchs[1].toString());
         } else {
@@ -214,7 +204,7 @@ public class Main {
         }*/
 
         matchs[2] = new Matchs(sports[1], joueurs[0], joueurs[1], new Date("06/12/2020"));
-        Long id3 = service.creerMatch(matchs[2]);
+        String id3 = service.creerMatch(matchs[2]);
         /*if (id3 != null) {
             System.out.println(matchs[2].toString());
         } else {

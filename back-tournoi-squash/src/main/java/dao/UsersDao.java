@@ -9,13 +9,15 @@ import java.util.Date;
 public class UsersDao {
     
     public Users chercherParMail(String mail) {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.email = :mail", Users.class);
-        query.setParameter("mail", mail); // correspond au paramètre ":mail" dans la requête
-        List<Users> Utilisateurs = query.getResultList();
         Users result = null;
-        if (!Utilisateurs.isEmpty()) {
-            result = Utilisateurs.get(0); // premier de la liste
+        if(mail != null && mail.length() > 0){
+            EntityManager em = JpaUtil.obtenirContextePersistance();
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.email = :mail", Users.class);
+            query.setParameter("mail", mail); // correspond au paramètre ":mail" dans la requête
+            List<Users> Utilisateurs = query.getResultList();
+            if (!Utilisateurs.isEmpty()) {
+                result = Utilisateurs.get(0); // premier de la liste
+            }
         }
         return result;
     }
