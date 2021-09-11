@@ -104,9 +104,10 @@ public class MatchDao {
 
     public List<Matchs> afficheMatchs(Long idSport) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Matchs> query = em.createQuery("SELECT m FROM Matchs m WHERE m.sport.id = :id AND m.etat = :etat ORDER BY m.dateMatch DESC", Matchs.class);
+        TypedQuery<Matchs> query = em.createQuery("SELECT m FROM Matchs m WHERE m.sport.id = :id AND (m.etat = :etat1 OR m.etat = :etat2) ORDER BY m.dateMatch DESC", Matchs.class);
         query.setParameter("id", idSport);     
-        query.setParameter("etat", "TERMINEE"); 
+        query.setParameter("etat1", "TERMINEE"); 
+        query.setParameter("etat2", "FORFAIT"); 
         return query.getResultList();
     }
 

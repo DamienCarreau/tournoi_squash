@@ -410,15 +410,28 @@ public class Service {
      * @param match - match à créer
      * @return l'id du match
      */
-    public Long creerMatch(Matchs match){
-        Long resultat = null;
+    public String creerMatch(Matchs match){
+        String resultat = null;
         JpaUtil.creerContextePersistance();
         try {
             JpaUtil.ouvrirTransaction();  
-            matchDao.creer(match);
+            // Check si un match en attente existe déjà entre ses 2 joueurs
+            List<Matchs> matchAttente = matchDao.obtenirMatchEnAttente();
+            boolean exist = false;
+            for(Matchs m : matchAttente){
+                if(m.getSport().getId().equals(match.getSport().getId()) 
+                    && ((m.getJoueur1().getId().equals(match.getJoueur1().getId()) && m.getJoueur2().getId().equals(match.getJoueur2().getId()))
+                    || (m.getJoueur1().getId().equals(match.getJoueur2().getId()) && m.getJoueur2().getId().equals(match.getJoueur1().getId())))){
+                    exist = true;
+                    resultat = "Un match non terminé existe déjà entre ces 2 joueurs !";
+                    break;
+                }
+            }
+            if(!exist)
+                matchDao.creer(match);
             JpaUtil.validerTransaction();
             if(match.getId() != null)
-                resultat = match.getId();
+                resultat = "ok";
         } catch (Exception ex) {
             System.out.println(ex);
             JpaUtil.annulerTransaction();
@@ -828,7 +841,6 @@ public class Service {
             JpaUtil.ouvrirTransaction(); 
             List<Matchs> liste = matchDao.obtenirMatchEnAttente();
             for(Matchs m : liste){
-                //Date dateMatch = m.getDateMatch();
                 Date date = new Date();
                 Date dateCreation = m.getDateCreation();
 		Calendar cal = Calendar.getInstance();
@@ -836,6 +848,7 @@ public class Service {
                 cal.add(Calendar.DATE, 15);
                 dateCreation = cal.getTime();
                 if(dateCreation.before(date)){ 
+                    System.out.println(dateCreation +" < "+date);
                     Joueur vainqueur = null;
                     Joueur perdant = null;
                     if(m.getEtat().equals("EN_ATTENTE_J1")){
@@ -850,15 +863,23 @@ public class Service {
                     Long classementVainqueur = levelDao.getLevel(vainqueur.getId(),m.getSport().getId()).getClassement();
                     Long classementPerdant = levelDao.getLevel(perdant.getId(),m.getSport().getId()).getClassement();
                     if(classementVainqueur > classementPerdant){
-                        List<Level> li = levelDao.obtenirJoueurEntre(m.getSport().getId(),classementPerdant,classementVainqueur);
-                        for(Level l : li)
-                            levelDao.setClassement(l.getId(),l.getClassement()+1);
-                        //classement vainqueur = classement perdant
-                        levelDao.setClassement(levelDao.getLevel(vainqueur.getId(),m.getSport().getId()).getId(),classementPerdant);
-                        //classement perdant ++
-                        levelDao.setClassement(levelDao.getLevel(perdant.getId(),m.getSport().getId()).getId(),classementPerdant+1);
+                        if(classementVainqueur == classementPerdant+1){
+                            // On inverse les 2 classements
+                            levelDao.setClassement(levelDao.getLevel(vainqueur.getId(),m.getSport().getId()).getId(),classementPerdant);
+                            levelDao.setClassement(levelDao.getLevel(perdant.getId(),m.getSport().getId()).getId(),classementPerdant+1);
+                        }else{
+                            // On descend le perdant d'un (on inverse avec le joueur inférieur)
+                            Level joueurInferieur = levelDao.getLevelByClassement(m.getSport().getId(), classementPerdant+1);
+                            levelDao.setClassement(levelDao.getLevel(perdant.getId(),m.getSport().getId()).getId(),classementPerdant+1);
+                            levelDao.setClassement(joueurInferieur.getId(),classementPerdant);
+                            // On monte le vainqueur d'un (on inverse avec le joueur supérieur)
+                            Level joueurSuperieur = levelDao.getLevelByClassement(m.getSport().getId(), classementVainqueur-1);
+                            levelDao.setClassement(levelDao.getLevel(vainqueur.getId(),m.getSport().getId()).getId(),classementVainqueur-1);
+                            levelDao.setClassement(joueurSuperieur.getId(),classementVainqueur);
+                        }
                     }
                     matchDao.changeEtat(m.getId(),"FORFAIT");
+                    // enregistre les sports maj pour mettre à jour les niveaux par la suite
                     boolean b = false;
                     for(Sport s : list){
                         if(s.equals(m.getSport())){

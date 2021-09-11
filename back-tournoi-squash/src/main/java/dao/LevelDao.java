@@ -37,6 +37,18 @@ public class LevelDao {
         return query.getResultList();
     }
 
+    public Level getLevelByClassement(Long idSport, Long classement){
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Level> query = em.createQuery("SELECT l FROM Level l WHERE l.classement = :classement AND l.sport.id = :idSport", Level.class);
+        query.setParameter("classement", classement);
+        query.setParameter("idSport", idSport);
+        List<Level> level = query.getResultList();
+        Level result = null;
+        if(!level.isEmpty())
+            result = level.get(0);
+        return result;
+    }
+
     public Long introduction(Long idSport, int cpt, List<String> niveaux){
         Long result = 0L;
         EntityManager em = JpaUtil.obtenirContextePersistance();
